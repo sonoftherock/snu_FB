@@ -5,6 +5,7 @@ var request = require("request");
 // var functionSheet = require('./functionSheet');
 // var path = require('path');
 var async = require('async');
+const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
 // var apiai = require('apiai');
 // var nlpapp = apiai("3d2a930932f6409e90ce7cddbe99c3fc");
