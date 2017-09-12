@@ -22,10 +22,14 @@ app.use(bodyParser.json());
 
 app.set('port', (process.env.PORT || 5000));
 
+
+
+
 app.get('/webhook', function(req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
       req.query['hub.verify_token'] === 'ZoavjtmQjel17ai') {
     console.log("Validating webhook");
+    console.log(req.body)
     res.status(200).send(req.query['hub.challenge']);
   } else {
     console.error("Failed validation. Make sure the validation tokens match.");
