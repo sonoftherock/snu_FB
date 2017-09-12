@@ -1,9 +1,9 @@
 {
   "name": "snu_fb",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "dependencies": {
+    "async": "^2.5.0",
     "body-parser": "^1.18.1",
     "express": "^4.15.4"
   },
@@ -12,5 +12,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Trevor Shim",
-  "license": "ISC"
+  "license": "ISC",
+  "description": ""
 }
