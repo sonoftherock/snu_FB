@@ -90,7 +90,7 @@ function receivedMessage(event) {
         sendGenericMessage(senderID);
         break;
       case '안녕':
-        callUserProfileAPI(message)
+        callUserProfileAPI(senderID)
       default:
         sendTextMessage(senderID, messageText);
     }
@@ -112,9 +112,7 @@ function sendTextMessage(recipientId, messageText) {
   callSendAPI(messageData);
 }
 
-function callUserProfileAPI(messageData){
-  var senderId = event.sender.id;
-  var payload = event.postback.payload;
+function callUserProfileAPI(senderId){
 
    request({
      url: "https://graph.facebook.com/v2.6/" + senderId,
@@ -129,10 +127,10 @@ function callUserProfileAPI(messageData){
      } else {
        var bodyObj = JSON.parse(body);
        name = bodyObj.first_name;
-       greeting = name + " 안녕!";
+       var greeting = name + " 안녕!";
      }
      var message = greeting + "난 캠퍼스 버디의 서울대 담당 챗봇 설대봇이야.";
-     sendTextMessage(senderId, {text: message});
+     sendTextMessage(senderId, message);
    });
 }
 
