@@ -1,7 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var request = require("request");
-// var mongodb = require('mongodb');
+var mongodb = require('mongodb');
 // var functionSheet = require('./functionSheet');
 // var path = require('path');
 var async = require('async');
@@ -11,12 +11,12 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 // var nlpapp = apiai("3d2a930932f6409e90ce7cddbe99c3fc");
 
 var app = express();
-// var ObjectID = mongodb.ObjectID;
+var ObjectID = mongodb.ObjectID;
 
 app.use(bodyParser.json());
 
-// var db;
-// var config = require('./Schema/config');
+var db;
+var config = require('./Schema/config');
 
 // process.on('uncaughtException', function (err) {
 //     db.collection('error').insertOne({ "type": err.type, "msg": err.msg, "stack": err.stack });
@@ -58,10 +58,6 @@ app.post('/webhook', function (req, res) {
     });
 
     // Assume all went well.
-    //
-    // You must send back a 200, within 20 seconds, to let us know
-    // you've successfully received the callback. Otherwise, the request
-    // will time out and we will keep trying to resend.
     res.sendStatus(200);
   }
 });
@@ -83,12 +79,7 @@ function receivedMessage(event) {
 
   if (messageText) {
 
-    // If we receive a text message, check to see if it matches a keyword
-    // and send back the example. Otherwise, just echo the text we received.
     switch (messageText) {
-      case 'generic':
-        sendGenericMessage(senderID);
-        break;
       case '안녕':
         callUserProfileAPI(senderID)
       default:
@@ -99,6 +90,7 @@ function receivedMessage(event) {
   }
 }
 
+//보내기 (res.send와 동일)
 function sendTextMessage(recipientId, messageText) {
   var messageData = {
     recipient: {
@@ -112,13 +104,13 @@ function sendTextMessage(recipientId, messageText) {
   callSendAPI(messageData);
 }
 
+//유저 정보 읽기
 function callUserProfileAPI(senderId){
-
    request({
      url: "https://graph.facebook.com/v2.6/" + senderId,
      qs: {
        access_token: process.env.PAGE_ACCESS_TOKEN,
-       fields: "first_name"
+       fields: "first_name,last_name,gender"
      },
      method: "GET"
    }, function(error, response, body) {
@@ -126,14 +118,18 @@ function callUserProfileAPI(senderId){
        console.log("Error getting user's name: " +  error);
      } else {
        var bodyObj = JSON.parse(body);
-       name = bodyObj.first_name;
-       var greeting = name + " 안녕!";
+       first_name = bodyObj.first_name;
+       last_name = bodyObj.last_name;
+       gender = bodyObj.gender;
+       db.collection('users').insertOne({"fbuid": senderId, "first_name": first_name, "last_name": last_name, "gender": gender})
+       var greeting = first_name + " 안녕!";
      }
      var message = greeting + "난 캠퍼스 버디의 서울대 담당 챗봇 설대봇이야.";
      sendTextMessage(senderId, message);
    });
 }
 
+// 메시지 보내기
 function callSendAPI(messageData) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
@@ -145,9 +141,6 @@ function callSendAPI(messageData) {
     if (!error && response.statusCode == 200) {
       var recipientId = body.recipient_id;
       var messageId = body.message_id;
-
-      console.log("Successfully sent generic message with id %s to recipient %s",
-        messageId, recipientId);
     } else {
       console.error("Unable to send message.");
       console.error(response);
@@ -156,52 +149,6 @@ function callSendAPI(messageData) {
   });
 }
 
-function sendGenericMessage(recipientId) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "generic",
-          elements: [{
-            title: "rift",
-            subtitle: "Next-generation virtual reality",
-            item_url: "https://www.oculus.com/en-us/rift/",
-            image_url: "http://messengerdemo.parseapp.com/img/rift.png",
-            buttons: [{
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/rift/",
-              title: "Open Web URL"
-            }, {
-              type: "postback",
-              title: "Call Postback",
-              payload: "Payload for first bubble",
-            }],
-          }, {
-            title: "touch",
-            subtitle: "Your Hands, Now in VR",
-            item_url: "https://www.oculus.com/en-us/touch/",
-            image_url: "http://messengerdemo.parseapp.com/img/touch.png",
-            buttons: [{
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/touch/",
-              title: "Open Web URL"
-            }, {
-              type: "postback",
-              title: "Call Postback",
-              payload: "Payload for second bubble",
-            }]
-          }]
-        }
-      }
-    }
-  };
-
-  callSendAPI(messageData);
-}
 //
 // app.get('/privacy-policy', function(req, res) {
 //     res.sendFile(path.join(__dirname + '/privacyStatement.html'));
@@ -286,6 +233,6 @@ function sendGenericMessage(recipientId) {
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
-    // require('./database').init(app, config);
-    // db = app.get('database');
+    require('./database').init(app, config);
+    db = app.get('database');
 });
