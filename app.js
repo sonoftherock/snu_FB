@@ -89,7 +89,8 @@ function receivedMessage(event) {
       case 'generic':
         sendGenericMessage(senderID);
         break;
-
+      case '안녕':
+        callUserProfileAPI(message)
       default:
         sendTextMessage(senderID, messageText);
     }
@@ -109,6 +110,30 @@ function sendTextMessage(recipientId, messageText) {
   };
 
   callSendAPI(messageData);
+}
+
+function callUserProfileAPI(messageData){
+  var senderId = event.sender.id;
+  var payload = event.postback.payload;
+
+   request({
+     url: "https://graph.facebook.com/v2.6/" + senderId,
+     qs: {
+       access_token: process.env.PAGE_ACCESS_TOKEN,
+       fields: "first_name"
+     },
+     method: "GET"
+   }, function(error, response, body) {
+     if (error) {
+       console.log("Error getting user's name: " +  error);
+     } else {
+       var bodyObj = JSON.parse(body);
+       name = bodyObj.first_name;
+       greeting = name + " 안녕!";
+     }
+     var message = greeting + "난 캠퍼스 버디의 서울대 담당 챗봇 설대봇이야.";
+     sendTextMessage(senderId, {text: message});
+   });
 }
 
 function callSendAPI(messageData) {
