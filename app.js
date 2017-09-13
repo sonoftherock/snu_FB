@@ -24,6 +24,28 @@ var config = require('./Schema/config');
 
 app.set('port', (process.env.PORT || 5000));
 
+request({
+  uri: 'https://graph.facebook.com/v2.6/me/messenger_profile',
+  qs: { access_token: PAGE_ACCESS_TOKEN },
+  method: 'POST',
+  json: {
+    "get_started":{
+      "payload":"<GET_STARTED_PAYLOAD>"
+    }
+  }
+}, function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+    var recipientId = body.recipient_id;
+    var messageId = body.message_id;
+  } else {
+    console.error("Unable to send message.");
+    console.error(response);
+    console.error(error);
+  }
+});
+
+
+
 app.get('/webhook', function(req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
       req.query['hub.verify_token'] === 'ZoavjtmQjel17ai') {
@@ -51,6 +73,8 @@ app.post('/webhook', function (req, res) {
       entry.messaging.forEach(function(event) {
         if (event.message) {
           receivedMessage(event);
+        } else if (event.postback) {
+          receivedPostback(event);
         } else {
           console.log("Webhook received unknown event: ", event);
         }
@@ -78,7 +102,44 @@ function receivedMessage(event) {
   var messageAttachments = message.attachments;
 
   if (messageText) {
+    var task = [
+        function (callback) {
+            //asks for sex to differentiate between users who completed registration and those who did not
+            db.collection('users').findOne({ "fbuid": req.body.user_key}, function (err, result) {
+                if (err) throw err;
+                callback(null, result)
+            });
+        },
+        function (result, callback) {
+            var execute;
+            if (result) {
+              var request = nlpapp.textRequest(req.body.content, {
+                  sessionId: senderID
+              });
 
+              request.on('response', function(response) {
+                db.collection('users').findOne({ "fbuid": req.body.user_key }, function (err, user) {
+                    if (err) throw err;
+                    callback(null, (functionSheet[user.messagePriority] || functionSheet[messageText] || functionSheet[response.result.metadata.intentName] || functionSheet["HeuristicResponse"]));
+                });
+              });
+
+              request.on('error', function(error) {
+                callback(null, (functionSheet[doc.messagePriority] || functionSheet[req.body.content] || functionSheet["HeuristicResponse"]));
+              });
+
+              request.end();
+
+            } else {
+                callback(null, functionSheet["newBuddy"]);
+            }
+        },
+        function (execute, callback) {
+            execute(req, res, db);
+            callback(null);
+        }];
+
+    async.waterfall(task);
     switch (messageText) {
       case '안녕':
         callUserProfileAPI(senderID)
@@ -122,8 +183,15 @@ function callUserProfileAPI(senderId){
        first_name = bodyObj.first_name;
        last_name = bodyObj.last_name;
        gender = bodyObj.gender;
-       db.collection('users').insertOne({"fbuid": senderId, "first_name": first_name, "last_name": last_name, "gender": gender})
-       var greeting = first_name + " 안녕!";
+       db.collection('users', function (err, user) {
+         if (user) {
+           db.collection('users').update({"fbuid": senderId}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
+         }
+         else {
+           db.collection('users').insertOne({"fbuid": senderId, "first_name": first_name, "last_name": last_name, "gender": gender})
+         }
+       })
+       var greeting = first_name + " 안녕! ";
      }
      var message = greeting + "난 캠퍼스 버디의 서울대 담당 챗봇 설대봇이야.";
      sendTextMessage(senderId, message);
