@@ -32,9 +32,13 @@ var whichSikdang = function(event, db){
     request(options, function (error, response, body) {
       if (error) throw new Error(error);
       for (i = 0; i < JSON.parse(body).stores.length; i++){
-        sikdang.push(JSON.parse(body).stores[i].name);
+        sikdang.push({
+          "content_type": "text",
+          "title": JSON.parse(body).stores[i].name
+        });
       }
       api.sendTextMessage(event, "어디서 먹을건데?");
+      var buttons = "quick_replies": sikdang;
       db.collection('users').update({ "fbuid": event.sender.id }, { $set: { "messagePriority": "sendBabMenu"} }, function(err, doc){
           if(err) throw err;
       });
