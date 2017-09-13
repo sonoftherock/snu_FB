@@ -81,7 +81,7 @@ app.post('/webhook', function (req, res) {
 
           },
           function (execute, callback) {
-              execute(event);
+              execute(event, db);
               callback(null);
           }];
         async.waterfall(task);

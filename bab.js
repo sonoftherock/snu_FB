@@ -13,7 +13,7 @@ var tmp = {"서울대학교" : 'spgIiBzSj0', "연세대학교" : "IDrA5MHp97", "
 // }
 
 //give out list of sikdangs
-var whichSikdang = function(event){
+var whichSikdang = function(event, db){
   var sikdang = [];
   var utc = new Date().setUTCHours(28);
   var todayDate = new Date(utc).toISOString().slice(0,10);
