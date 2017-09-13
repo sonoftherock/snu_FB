@@ -97,7 +97,7 @@ function receivedPostback(event) {
 
   if (payload == "<GET_STARTED_PAYLOAD>") {
     request({
-      url: "https://graph.facebook.com/v2.6/" + senderId,
+      url: "https://graph.facebook.com/v2.6/" + senderID,
       qs: {
         access_token: process.env.PAGE_ACCESS_TOKEN,
         locale: "ko_KR",
@@ -114,10 +114,10 @@ function receivedPostback(event) {
         gender = bodyObj.gender;
         db.collection('users', function (err, user) {
           if (user) {
-            db.collection('users').update({"fbuid": senderId}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
+            db.collection('users').update({"fbuid": senderID}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
           }
           else {
-            db.collection('users').insertOne({"fbuid": senderId, "first_name": first_name, "last_name": last_name, "gender": gender})
+            db.collection('users').insertOne({"fbuid": senderID, "first_name": first_name, "last_name": last_name, "gender": gender})
           }
         })
       }
@@ -165,9 +165,9 @@ function sendTextMessage(recipientId, messageText) {
 }
 
 //유저 정보 읽기
-function callUserProfileAPI(senderId){
+function callUserProfileAPI(senderID){
    request({
-     url: "https://graph.facebook.com/v2.6/" + senderId,
+     url: "https://graph.facebook.com/v2.6/" + senderID,
      qs: {
        access_token: process.env.PAGE_ACCESS_TOKEN,
        locale: "ko_KR",
@@ -184,10 +184,10 @@ function callUserProfileAPI(senderId){
        gender = bodyObj.gender;
        db.collection('users', function (err, user) {
          if (user) {
-           db.collection('users').update({"fbuid": senderId}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
+           db.collection('users').update({"fbuid": senderID}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
          }
          else {
-           db.collection('users').insertOne({"fbuid": senderId, "first_name": first_name, "last_name": last_name, "gender": gender})
+           db.collection('users').insertOne({"fbuid": senderID, "first_name": first_name, "last_name": last_name, "gender": gender})
          }
        })
      }
