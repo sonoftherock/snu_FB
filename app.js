@@ -86,15 +86,52 @@ app.post('/webhook', function (req, res) {
   }
 });
 
+function receivedPostback(event) {
+  var senderID = event.sender.id;
+  var recipientID = event.recipient.id;
+  var timeOfPostback = event.timestamp;
+
+  // The 'payload' param is a developer-defined field which is set in a postback
+  // button for Structured Messages.
+  var payload = event.postback.payload;
+
+  if (payload == "<GET_STARTED_PAYLOAD>") {
+    request({
+      url: "https://graph.facebook.com/v2.6/" + senderId,
+      qs: {
+        access_token: process.env.PAGE_ACCESS_TOKEN,
+        locale: "ko_KR",
+        fields: "first_name,last_name,gender"
+      },
+      method: "GET"
+    }, function(error, response, body) {
+      if (error) {
+        console.log("Error getting user's name: " +  error);
+      } else {
+        var bodyObj = JSON.parse(body);
+        first_name = bodyObj.first_name;
+        last_name = bodyObj.last_name;
+        gender = bodyObj.gender;
+        db.collection('users', function (err, user) {
+          if (user) {
+            db.collection('users').update({"fbuid": senderId}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
+          }
+          else {
+            db.collection('users').insertOne({"fbuid": senderId, "first_name": first_name, "last_name": last_name, "gender": gender})
+          }
+        })
+      }
+    sendTextMessage(senderID, "안녕 " + first_name + "!");
+    sendTextMessage(senderID, "난 너의 캠퍼스 생활을 도와줄 설대봇이야!");
+  })
+}
+}
+
 function receivedMessage(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
   var message = event.message;
-
-  console.log("Received message for user %d and page %d at %d with message:",
-    senderID, recipientID, timeOfMessage);
-  console.log(JSON.stringify(message));
 
   var messageId = message.mid;
 
@@ -102,44 +139,6 @@ function receivedMessage(event) {
   var messageAttachments = message.attachments;
 
   if (messageText) {
-    var task = [
-        function (callback) {
-            //asks for sex to differentiate between users who completed registration and those who did not
-            db.collection('users').findOne({ "fbuid": req.body.user_key}, function (err, result) {
-                if (err) throw err;
-                callback(null, result)
-            });
-        },
-        function (result, callback) {
-            var execute;
-            if (result) {
-              var request = nlpapp.textRequest(req.body.content, {
-                  sessionId: senderID
-              });
-
-              request.on('response', function(response) {
-                db.collection('users').findOne({ "fbuid": req.body.user_key }, function (err, user) {
-                    if (err) throw err;
-                    callback(null, (functionSheet[user.messagePriority] || functionSheet[messageText] || functionSheet[response.result.metadata.intentName] || functionSheet["HeuristicResponse"]));
-                });
-              });
-
-              request.on('error', function(error) {
-                callback(null, (functionSheet[doc.messagePriority] || functionSheet[req.body.content] || functionSheet["HeuristicResponse"]));
-              });
-
-              request.end();
-
-            } else {
-                callback(null, functionSheet["newBuddy"]);
-            }
-        },
-        function (execute, callback) {
-            execute(req, res, db);
-            callback(null);
-        }];
-
-    async.waterfall(task);
     switch (messageText) {
       case '안녕':
         callUserProfileAPI(senderID)
@@ -191,10 +190,8 @@ function callUserProfileAPI(senderId){
            db.collection('users').insertOne({"fbuid": senderId, "first_name": first_name, "last_name": last_name, "gender": gender})
          }
        })
-       var greeting = first_name + " 안녕! ";
      }
-     var message = greeting + "난 캠퍼스 버디의 서울대 담당 챗봇 설대봇이야.";
-     sendTextMessage(senderId, message);
+     return [first_name, last_name, gender];
    });
 }
 
