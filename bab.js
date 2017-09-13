@@ -98,9 +98,9 @@ var babAPIerror = function (req, res, db) {
 
 module.exports = {
     functionMatch: {
-        "오늘 밥 뭐야?": whichSikdang
+        "오늘 밥 뭐야?": whichSikdang,
         // "bab": whichSikdang,
         // "hungry - yes": whichSikdang,
-        // "sendBabMenu": sendBabMenu
+        "sendBabMenu": sendBabMenu
     }
 };
