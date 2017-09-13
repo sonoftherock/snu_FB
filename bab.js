@@ -31,19 +31,14 @@ var whichSikdang = function(event, db){
 
     request(options, function (error, response, body) {
       if (error) throw new Error(error);
-      for (i = 0; i < JSON.parse(body).stores.length; i++){
+      for (i = 0; i < 11; i++){
         sikdang.push({
           "type": "postback",
           "title": JSON.parse(body).stores[i].name,
           "payload": JSON.parse(body).stores[i].name
         });
       }
-      var messageData = {"text": "어디서 먹을건데?", "buttons": [{
-        "type": "postback",
-        "title": '학생회관',
-        "payload": '학생회관'
-      }]};
-
+      var messageData = {"text": "어디서 먹을건데?", "quick_replies": sikdang };
       api.sendMessage(event, messageData);
       db.collection('users').update({ "fbuid": event.sender.id }, { $set: { "messagePriority": "sendBabMenu"} }, function(err, doc){
           if(err) throw err;
