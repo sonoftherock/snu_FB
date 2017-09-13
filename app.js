@@ -112,19 +112,19 @@ function receivedPostback(event) {
         first_name = bodyObj.first_name;
         last_name = bodyObj.last_name;
         gender = bodyObj.gender;
-        db.collection('users').findOne({"fbuid": senderID}), function (err, user) {
-          if (user) {
+        db.collection('users').findOne({"fbuid": senderID}, function (err, user){
+          if (user){
             db.collection('users').update({"fbuid": senderID}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
           }
           else {
             db.collection('users').insertOne({"fbuid": senderID, "first_name": first_name, "last_name": last_name, "gender": gender})
           }
-        })
-      }
+        });
+      })
+    }
     sendTextMessage(senderID, "안녕 " + first_name + "!");
     sendTextMessage(senderID, "난 너의 캠퍼스 생활을 도와줄 설대봇이야!");
-  })
-}
+  }
 }
 
 function receivedMessage(event) {
