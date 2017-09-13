@@ -35,7 +35,7 @@ var whichSikdang = function(event, db){
         sikdang.push(JSON.parse(body).stores[i].name);
       }
       api.sendTextMessage(event);
-      db.collection('users').update({ "uid": req.body.user_key }, { $set: { "messagePriority": "sendBabMenu"} }, function(err, doc){
+      db.collection('users').update({ "fbuid": event.sender.id }, { $set: { "messagePriority": "sendBabMenu"} }, function(err, doc){
           if(err) throw err;
       });
     });
