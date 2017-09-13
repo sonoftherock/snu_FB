@@ -38,7 +38,7 @@ var whichSikdang = function(event, db){
         });
       }
       api.sendTextMessage(event, "어디서 먹을건데?");
-      var messageData = "quick_replies": sikdang;
+      var messageData = {"quick_replies": sikdang};
       api.callSendAPI(messageData);
       db.collection('users').update({ "fbuid": event.sender.id }, { $set: { "messagePriority": "sendBabMenu"} }, function(err, doc){
           if(err) throw err;
