@@ -33,7 +33,7 @@ var whichSikdang = function(event, db){
       if (error) throw new Error(error);
       for (i = 0; i < 11; i++){
         sikdang.push({
-          "type": "postback",
+          "content_type": "text",
           "title": JSON.parse(body).stores[i].name,
           "payload": JSON.parse(body).stores[i].name
         });
