@@ -37,7 +37,7 @@ var whichSikdang = function(event, db){
           "title": JSON.parse(body).stores[i].name
         });
       }
-      var messageData = {"text": "어디서 먹을건데?"};
+      var messageData = {"text": "어디서 먹을건데?", "quick_replies": {"content_type": "text", "title": "학생회관"}};
 
       api.sendMessage(event, messageData);
       db.collection('users').update({ "fbuid": event.sender.id }, { $set: { "messagePriority": "sendBabMenu"} }, function(err, doc){
