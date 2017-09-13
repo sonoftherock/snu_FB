@@ -112,7 +112,7 @@ function receivedPostback(event) {
         first_name = bodyObj.first_name;
         last_name = bodyObj.last_name;
         gender = bodyObj.gender;
-        db.collection('users', function (err, user) {
+        db.collection('users').findOne({"fbuid": senderID}), function (err, user) {
           if (user) {
             db.collection('users').update({"fbuid": senderID}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
           }
