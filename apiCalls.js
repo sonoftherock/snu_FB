@@ -2,20 +2,17 @@ var request = require("request");
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
 //보내기 (res.send와 동일)
-function sendTextMessage(event) {
+function sendTextMessage(event, messageToSend) {
   var senderID = event.sender.id;
   var timeOfMessage = event.timestamp;
   var message = event.message;
-
-  var messageText = message.text;
-  var messageAttachments = message.attachments;
 
   var messageData = {
     recipient: {
       id: senderID
     },
     message: {
-      text: messageText
+      text: messageToSend
     }
   };
   callSendAPI(messageData);

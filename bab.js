@@ -34,7 +34,7 @@ var whichSikdang = function(event, db){
       for (i = 0; i < JSON.parse(body).stores.length; i++){
         sikdang.push(JSON.parse(body).stores[i].name);
       }
-      api.sendTextMessage(event);
+      api.sendTextMessage(event, "어디서 먹을건데?");
       db.collection('users').update({ "fbuid": event.sender.id }, { $set: { "messagePriority": "sendBabMenu"} }, function(err, doc){
           if(err) throw err;
       });
