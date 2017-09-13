@@ -2,7 +2,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var request = require("request");
 var mongodb = require('mongodb');
-// var functionSheet = require('./functionSheet');
+var functionSheet = require('./functionSheet');
 // var path = require('path');
 var async = require('async');
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
@@ -44,8 +44,6 @@ request({
   }
 });
 
-
-
 app.get('/webhook', function(req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
       req.query['hub.verify_token'] === 'ZoavjtmQjel17ai') {
@@ -71,13 +69,28 @@ app.post('/webhook', function (req, res) {
 
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
-        if (event.message) {
-          receivedMessage(event);
-        } else if (event.postback) {
-          receivedPostback(event);
-        } else {
-          console.log("Webhook received unknown event: ", event);
-        }
+        var senderID = event.sender.id;
+        var task = [
+          function (callback) {
+            var execute;
+            db.collection('users').findOne({ "fbuid": senderID}, function (err, doc) {
+                if (err) throw err;
+                callback(null, (functionSheet[event.message.text]));
+            });
+
+          },
+          function (execute, callback) {
+              execute(event);
+              callback(null);
+          }];
+        async.waterfall(task);
+        // if (event.message) {
+        //   receivedMessage(event);
+        // } else if (event.postback) {
+        //   receivedPostback(event);
+        // } else {
+        //   console.log("Webhook received unknown event: ", event);
+        // }
       });
     });
 
@@ -120,98 +133,44 @@ function receivedPostback(event) {
         });
       }
     });
-    }
     sendTextMessage(senderID, "안녕 " + first_name + "!");
     sendTextMessage(senderID, "난 너의 캠퍼스 생활을 도와줄 설대봇이야!");
-  }
-
-function receivedMessage(event) {
-  var senderID = event.sender.id;
-  var recipientID = event.recipient.id;
-  var timeOfMessage = event.timestamp;
-  var message = event.message;
-
-  var messageId = message.mid;
-
-  var messageText = message.text;
-  var messageAttachments = message.attachments;
-
-  if (messageText) {
-    switch (messageText) {
-      case '안녕':
-        callUserProfileAPI(senderID)
-      default:
-        sendTextMessage(senderID, messageText);
     }
-  } else if (messageAttachments) {
-    sendTextMessage(senderID, "Message with attachment received");
-  }
-}
-
-//보내기 (res.send와 동일)
-function sendTextMessage(recipientId, messageText) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      text: messageText
+    else {
+      db.collection('users').update({"fbuid": senderID}, {$set: {"messagePriority": payload}})
     }
-  };
-
-  callSendAPI(messageData);
 }
-
-//유저 정보 읽기
-function callUserProfileAPI(senderID){
-   request({
-     url: "https://graph.facebook.com/v2.6/" + senderID,
-     qs: {
-       access_token: process.env.PAGE_ACCESS_TOKEN,
-       locale: "ko_KR",
-       fields: "first_name,last_name,gender"
-     },
-     method: "GET"
-   }, function(error, response, body) {
-     if (error) {
-       console.log("Error getting user's name: " +  error);
-     } else {
-       var bodyObj = JSON.parse(body);
-       first_name = bodyObj.first_name;
-       last_name = bodyObj.last_name;
-       gender = bodyObj.gender;
-       db.collection('users', function (err, user) {
-         if (user) {
-           db.collection('users').update({"fbuid": senderID}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
-         }
-         else {
-           db.collection('users').insertOne({"fbuid": senderID, "first_name": first_name, "last_name": last_name, "gender": gender})
-         }
-       })
-     }
-     return [first_name, last_name, gender];
-   });
-}
-
-// 메시지 보내기
-function callSendAPI(messageData) {
-  request({
-    uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: PAGE_ACCESS_TOKEN },
-    method: 'POST',
-    json: messageData
-
-  }, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var recipientId = body.recipient_id;
-      var messageId = body.message_id;
-    } else {
-      console.error("Unable to send message.");
-      console.error(response);
-      console.error(error);
-    }
-  });
-}
+//
+// function receivedMessage(event) {
+//   var senderID = event.sender.id;
+//   var recipientID = event.recipient.id;
+//   var timeOfMessage = event.timestamp;
+//   var message = event.message;
+//
+//   var messageId = message.mid;
+//
+//   var messageText = message.text;
+//   var messageAttachments = message.attachments;
+//
+//   if (messageText) {
+//     var task = [
+//       function (callback) {
+//         var execute;
+//         db.collection('users').findOne({ "fbuid": req.body.user_key }, function (err, doc) {
+//             if (err) throw err;
+//             callback(null, (functionSheet[messageText]));
+//         });
+//
+//       },
+//       function (execute, callback) {
+//           execute(req, res, db);
+//           callback(null);
+//       }];
+//     async.waterfall(task);
+//   } else if (messageAttachments) {
+//     sendTextMessage(senderID, "Message with attachment received");
+//   }
+// }
 
 //
 // app.get('/privacy-policy', function(req, res) {
@@ -238,7 +197,6 @@ function callSendAPI(messageData) {
 //     ]
 //   })
 // });
-//
 //
 // var request = nlpapp.textRequest('안녕', {
 //     sessionId: '1'
