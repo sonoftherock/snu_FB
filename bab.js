@@ -40,7 +40,7 @@ var whichSikdang = function(event, db){
       }
       var messageData = {"text": "어디서 먹을건데?", "buttons": {
         "type": "postback",
-        "title": '학생회관'
+        "title": '학생회관',
         "payload": '학생회관'
       }};
 
