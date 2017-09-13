@@ -39,9 +39,12 @@ var whichSikdang = function(event, db){
         });
       }
       var messageData = {"text": "어디서 먹을건데?", "quick_replies": [
-        "content_type": "text",
-        "title": "학생회관",
-        "payload": "학생회관"]
+        {
+          "content_type": "text",
+          "title": "학생회관",
+          "payload": "학생회관"  
+        }
+      ]
       };
 
       api.sendMessage(event, messageData);
