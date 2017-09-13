@@ -83,12 +83,12 @@ var sendBabMenu = function(event, db){
        }
     });
 
-  db.collection('users').update({ "uid": req.body.user_key }, { $set: { "messagePriority": "idle"} }, function(err, doc){
+  db.collection('users').update({ "fbuid": event.sender.id }, { $set: { "messagePriority": "idle"} }, function(err, doc){
       if(err) throw err;
   });
   // })
 };
- 
+
 // var babAPIerror = function (req, res, db) {
 //   res.send({"message": {"text": "지금 학식 정보 제공하는 쪽에서 메뉴가 안 올라왔어... 미안"}})
 //   db.collection('users').update({ "uid": req.body.user_key }, { $set: { "messagePriority": "idle"} }, function(err, doc){
