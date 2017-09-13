@@ -1,3 +1,5 @@
+var request = require("request");
+
 //보내기 (res.send와 동일)
 function sendTextMessage(event) {
   var senderID = event.sender.id;

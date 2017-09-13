@@ -24,6 +24,7 @@ var config = require('./Schema/config');
 
 app.set('port', (process.env.PORT || 5000));
 
+//시작하기 버튼
 request({
   uri: 'https://graph.facebook.com/v2.6/me/messenger_profile',
   qs: { access_token: PAGE_ACCESS_TOKEN },
