@@ -91,8 +91,6 @@ function receivedPostback(event) {
   var recipientID = event.recipient.id;
   var timeOfPostback = event.timestamp;
 
-  // The 'payload' param is a developer-defined field which is set in a postback
-  // button for Structured Messages.
   var payload = event.postback.payload;
 
   if (payload == "<GET_STARTED_PAYLOAD>") {
@@ -120,12 +118,12 @@ function receivedPostback(event) {
             db.collection('users').insertOne({"fbuid": senderID, "first_name": first_name, "last_name": last_name, "gender": gender})
           }
         });
-      })
+      }
+    });
     }
     sendTextMessage(senderID, "안녕 " + first_name + "!");
     sendTextMessage(senderID, "난 너의 캠퍼스 생활을 도와줄 설대봇이야!");
   }
-}
 
 function receivedMessage(event) {
   var senderID = event.sender.id;
