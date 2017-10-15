@@ -84,7 +84,7 @@ app.post('/webhook', function (req, res) {
               callback(null);
           }];
         async.waterfall(task);
-        // if (event.message) {
+        // if (event.message) { 
         //   receivedMessage(event);
         // } else if (event.postback) {
         //   receivedPostback(event);
