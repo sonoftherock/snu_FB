@@ -1,16 +1,6 @@
 var request = require("request");
 var api = require("./apiCalls");
 var tmp = {"서울대학교" : 'spgIiBzSj0', "연세대학교" : "IDrA5MHp97", "고려대학교" : 'tqbAESBISp'};
-//
-// var readUniv = function (req, res, db, callback) {
-//     var univ = "미정";
-//     db.collection('users').findOne({ "uid": req.body.user_key }, function (err, doc) {
-//         if (doc) {
-//             univ = doc.univ;
-//         }
-//         callback(univ);
-//     });
-// }
 
 //give out list of sikdangs
 var whichSikdang = function(event, db){

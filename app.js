@@ -8,7 +8,7 @@ var async = require('async');
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
 // var apiai = require('apiai');
-// var nlpapp = apiai("3d2a930932f6409e90ce7cddbe99c3fc");
+// var nlpapp = apia i("3d2a930932f6409e90ce7cddbe99c3fc");
 
 var app = express();
 var ObjectID = mongodb.ObjectID;
@@ -188,15 +188,6 @@ function receivedPostback(event) {
 // app.get('/korea', (req, res) => {
 //   res.sendFile(path.join(__dirname + '/images/korea.png'));
 // })
-//
-// app.get('/keyboard', (req, res) => {
-//   res.send({
-//     type : "buttons",
-//     buttons : [
-//       "버디와 대화하기", "익명 우편함","동아리 추천", "오늘 밥 뭐야?", "미팅 들어온 거 있어?", "열람실 현황"
-//     ]
-//   })
-// });
 //
 // var request = nlpapp.textRequest('안녕', {
 //     sessionId: '1'
