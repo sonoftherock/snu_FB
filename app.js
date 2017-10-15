@@ -8,7 +8,7 @@ var async = require('async');
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
 // var apiai = require('apiai');
-// var nlpapp = apia i("3d2a930932f6409e90ce7cddbe99c3fc");
+// var nlpapp = apiai("3d2a930932f6409e90ce7cddbe99c3fc");
 
 var app = express();
 var ObjectID = mongodb.ObjectID;
