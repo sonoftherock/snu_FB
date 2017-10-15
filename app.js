@@ -75,23 +75,22 @@ app.post('/webhook', function (req, res) {
             var execute;
             db.collection('users').findOne({ "fbuid": senderID}, function (err, doc) {
                 if (err) throw err;
-                console.log(event.message)
-                callback(null, (functionSheet[doc.messagePriority] || functionSheet[event.message.text]));
+                if (event.message) {
+                  callback(null, (functionSheet[doc.messagePriority] || functionSheet[event.message.text]));
+                } else if (event.postback) {
+                  receivedPostback(event);
+                } else {
+                  console.log("Webhook received unknown event: ", event);
+                }
             });
 
           },
           function (execute, callback) {
-              execute(req, res, db);
+              execute(event, db);
               callback(null);
           }];
         async.waterfall(task);
-        // if (event.message) {
-        //   receivedMessage(event);
-        // } else if (event.postback) {
-        //   receivedPostback(event);
-        // } else {
-        //   console.log("Webhook received unknown event: ", event);
-        // }
+
       });
     });
 
