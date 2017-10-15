@@ -7,6 +7,7 @@ var whichSikdang = function(event, db){
   var sikdang = [];
   var utc = new Date().setUTCHours(28);
   var todayDate = new Date(utc).toISOString().slice(0,10);
+  console.log(todayDate);
   var key;
   // readUniv (req, res, db, function (univ) {
     key = tmp["서울대학교"];
