@@ -72,7 +72,12 @@ app.post('/webhook', function (req, res) {
             var execute;
             db.collection('users').findOne({ "fbuid": senderID}, function (err, doc) {
                 if (err) throw err;
-                callback(null, (receivedPostback(event) || functionSheet[doc.messagePriority] || functionSheet[event.message.text]));
+                if (doc) {
+                  callback(null, (functionSheet[doc.messagePriority] || functionSheet[event.message.text]));
+                }
+                else {
+                  receivedPostback(event);
+                }
             });
           },
           function (execute, callback) {
