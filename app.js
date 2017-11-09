@@ -71,7 +71,7 @@ app.post('/webhook', function (req, res) {
             var execute;
             db.collection('users').findOne({ "fbuid": senderID}, function (err, doc) {
                 if (err) throw err;
-                callback(null, (functionSheet[doc.messagePriority] || functionSheet[event.message.text]));
+                callback(null, (receivedPostback(event) || functionSheet[doc.messagePriority] || functionSheet[event.message.text]));
             });
           },
           function (execute, callback) {
