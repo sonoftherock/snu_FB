@@ -109,9 +109,9 @@ function receivedPostback(event) {
         console.log("Error getting user's name: " +  error);
       } else {
         var bodyObj = JSON.parse(body);
-        first_name = bodyObj.first_name;
-        last_name = bodyObj.last_name;
-        gender = bodyObj.gender;
+        var first_name = bodyObj.first_name;
+        var last_name = bodyObj.last_name;
+        var gender = bodyObj.gender;
         db.collection('users').findOne({"fbuid": senderID}, function (err, user){
           if (user){
             db.collection('users').update({"fbuid": senderID}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
