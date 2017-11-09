@@ -78,7 +78,6 @@ function watson(message){
 
     // Display the output from dialog, if any.
     if (response.output.text.length != 0) {
-      console.log("Watson alive")
         var messageData = {"text": response.output.text[0]};
         api.sendMessage(event, messageData);
     }
