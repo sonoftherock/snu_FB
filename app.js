@@ -119,6 +119,7 @@ function receivedPostback(event) {
                 db.collection('users').insertOne({"fbuid": senderID, "first_name": first_name, "last_name": last_name, "gender": gender})
               }
             });
+            callback(null, first_name)
           },
           function (first_name, callback) {
             console.log("firstname")
