@@ -3,6 +3,7 @@ var bodyParser = require("body-parser");
 var request = require("request");
 var mongodb = require('mongodb');
 var functionSheet = require('./functionSheet');
+// var path = require('path');
 var async = require('async');
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
@@ -54,43 +55,18 @@ app.get('/webhook', function(req, res) {
     res.sendStatus(403);
   }
 });
-//
-// function watson(message){
-//   var ConversationV1 = require('watson-developer-cloud/conversation/v1');
-//
-//   // Set up Conversation service wrapper.
-//   var conversation = new ConversationV1({
-//     username: 'e7c18156-a871-4523-90db-02af36cc117e', // replace with username from service key
-//     password: 'yNNowTXsrKXN', // replace with password from service key
-//     path: { workspace_id: '4d472b8b-cae7-4870-b074-e052ca47c0ca' }, // replace with workspace ID
-//     version_date: '2017-05-26'
-//   });
-//
-//   conversation.message({message}, processResponse);
-//
-//   // Process the conversation response.
-//   function processResponse(err, response) {
-//     if (err) {
-//       console.error(err); // something went wrong
-//       return;
-//     }
-//
-//     // Display the output from dialog, if any.
-//     if (response.output.text.length != 0) {
-//         var messageData = {"text": response.output.text[0]};
-//         api.sendMessage(event, messageData);
-//     }
-//   }
-// }
 
 app.post('/webhook', function (req, res) {
   var data = req.body;
+
   // Make sure this is a page subscription
   if (data.object === 'page') {
+
     // Iterate over each entry - there may be multiple if batched
     data.entry.forEach(function(entry) {
       var pageID = entry.id;
       var timeOfEvent = entry.time;
+
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
         var senderID = event.sender.id;
@@ -99,7 +75,7 @@ app.post('/webhook', function (req, res) {
             var execute;
             db.collection('users').findOne({ "fbuid": senderID}, function (err, doc) {
                 if (err) throw err;
-                callback(null, (functionSheet[doc.messagePriority] || functionSheet[event.message.text] ));
+                callback(null, (functionSheet[doc.messagePriority] || functionSheet[event.message.text]));
             });
           },
           function (execute, callback) {
@@ -109,6 +85,7 @@ app.post('/webhook', function (req, res) {
         async.waterfall(task);
       });
     });
+
     // Assume all went well.
     res.sendStatus(200);
   }
