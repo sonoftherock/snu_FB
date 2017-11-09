@@ -132,8 +132,8 @@ function receivedPostback(event) {
             callback(null, first_name)
           },
           function (first_name, callback) {
-            api.sendMessage(event, {"text":"안녕 " + first_name + "!"})
-            .then(api.sendMessage(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"}));
+            api.sendMessage(event, {"text":"안녕 " + first_name + "!"});
+            api.sendMessage(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
         }];
         async.waterfall(task);
       }
