@@ -55,7 +55,7 @@ app.get('/webhook', function(req, res) {
     res.sendStatus(403);
   }
 });
-// 
+//
 // function watson(message){
 //   var ConversationV1 = require('watson-developer-cloud/conversation/v1');
 //
@@ -103,7 +103,7 @@ app.post('/webhook', function (req, res) {
             var execute;
             db.collection('users').findOne({ "fbuid": senderID}, function (err, doc) {
                 if (err) throw err;
-                callback(null, (functionSheet[doc.messagePriority] || functionSheet[event.message.text] || watson(event.message.text)));
+                callback(null, (functionSheet[doc.messagePriority] || functionSheet[event.message.text] ));
             });
           },
           function (execute, callback) {
