@@ -3,7 +3,6 @@ var bodyParser = require("body-parser");
 var request = require("request");
 var mongodb = require('mongodb');
 var functionSheet = require('./functionSheet');
-var api = require("./apiCalls");
 var async = require('async');
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
@@ -86,15 +85,12 @@ app.get('/webhook', function(req, res) {
 
 app.post('/webhook', function (req, res) {
   var data = req.body;
-
   // Make sure this is a page subscription
   if (data.object === 'page') {
-
     // Iterate over each entry - there may be multiple if batched
     data.entry.forEach(function(entry) {
       var pageID = entry.id;
       var timeOfEvent = entry.time;
-
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
         var senderID = event.sender.id;
@@ -113,7 +109,6 @@ app.post('/webhook', function (req, res) {
         async.waterfall(task);
       });
     });
-
     // Assume all went well.
     res.sendStatus(200);
   }
