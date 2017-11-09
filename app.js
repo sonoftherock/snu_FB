@@ -4,6 +4,7 @@ var request = require("request");
 var mongodb = require('mongodb');
 var functionSheet = require('./functionSheet');
 // var path = require('path');
+var api = require('./apiCalls')
 var async = require('async');
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
@@ -121,8 +122,8 @@ function receivedPostback(event) {
         });
       }
     });
-    sendTextMessage(senderID, "안녕 " + first_name + "!");
-    sendTextMessage(senderID, "난 너의 캠퍼스 생활을 도와줄 설대봇이야!");
+    api.sendMessage(event, {"text":"안녕 " + first_name + "!"})
+    api.sendMessage(event, {"text":"난 너의 캠퍼스 생활을 도와줄 설대봇이야!"})
     }
     else {
       db.collection('users').update({"fbuid": senderID}, {$set: {"messagePriority": payload}})
