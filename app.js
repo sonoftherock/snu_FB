@@ -18,10 +18,6 @@ app.use(bodyParser.json());
 var db;
 var config = require('./Schema/config');
 
-// process.on('uncaughtException', function (err) {
-//     db.collection('error').insertOne({ "type": err.type, "msg": err.msg, "stack": err.stack });
-// });
-
 app.set('port', (process.env.PORT || 5000));
 
 //시작하기 버튼
