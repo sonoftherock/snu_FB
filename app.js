@@ -92,6 +92,7 @@ app.post('/webhook', function (req, res) {
   }
 });
 
+//"시작하기" 버튼 처리 - 유저 등록
 function receivedPostback(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
@@ -131,8 +132,12 @@ function receivedPostback(event) {
           function (first_name, callback) {
             console.log("firstname")
             api.sendMessage(event, {"text":"안녕 " + first_name + "!"})
-            api.sendMessage(event, {"text":"난 너의 캠퍼스 생활을 도와줄 설대봇이야!"})
-          }];
+            var greeting = "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"
+            callback(null, greeting);
+          },
+        function (greeting, callback){
+          api.sendMessage(event, {"text": greeting});
+        }];
         async.waterfall(task);
       }
     });
