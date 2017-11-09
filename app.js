@@ -70,15 +70,7 @@ app.post('/webhook', function (req, res) {
         var task = [
           function (callback) {
             var execute;
-            db.collection('users').findOne({ "fbuid": senderID}, function (err, doc) {
-                if (err) throw err;
-                if (doc) {
-                  callback(null, (functionSheet[doc.messagePriority] || functionSheet[event.message.text]));
-                }
-                else {
-                  receivedPostback(event);
-                }
-            });
+            callback(null, (functionSheet[event.message.text]));
           },
           function (execute, callback) {
               execute(event, db);
@@ -134,109 +126,6 @@ function receivedPostback(event) {
       db.collection('users').update({"fbuid": senderID}, {$set: {"messagePriority": payload}})
     }
 }
-//
-// function receivedMessage(event) {
-//   var senderID = event.sender.id;
-//   var recipientID = event.recipient.id;
-//   var timeOfMessage = event.timestamp;
-//   var message = event.message;
-//
-//   var messageId = message.mid;
-//
-//   var messageText = message.text;
-//   var messageAttachments = message.attachments;
-//
-//   if (messageText) {
-//     var task = [
-//       function (callback) {
-//         var execute;
-//         db.collection('users').findOne({ "fbuid": req.body.user_key }, function (err, doc) {
-//             if (err) throw err;
-//             callback(null, (functionSheet[messageText]));
-//         });
-//
-//       },
-//       function (execute, callback) {
-//           execute(req, res, db);
-//           callback(null);
-//       }];
-//     async.waterfall(task);
-//   } else if (messageAttachments) {
-//     sendTextMessage(senderID, "Message with attachment received");
-//   }
-// }
-
-//
-// app.get('/privacy-policy', function(req, res) {
-//     res.sendFile(path.join(__dirname + '/privacyStatement.html'));
-// });
-//
-// app.get('/snu', (req, res) => {
-//   res.sendFile(path.join(__dirname + '/images/snu.png'));
-// })
-//
-// app.get('/yonsei', (req, res) => {
-//   res.sendFile(path.join(__dirname + '/images/yonsei.png'));
-// })
-//
-// app.get('/korea', (req, res) => {
-//   res.sendFile(path.join(__dirname + '/images/korea.png'));
-// })
-//
-// var request = nlpapp.textRequest('안녕', {
-//     sessionId: '1'
-// });
-// request.on('response', function(response) {
-//   intentName = response.result.metadata.intentName
-// });
-//
-// request.on('error', function(error) {
-//     return "HeuristicResponse"
-// });
-//
-// request.end();
-//
-// app.post('/message', (req, res) => {
-//
-//     var task = [
-//         function (callback) {
-//             //asks for sex to differentiate between users who completed registration and those who did not
-//             db.collection('users').findOne({ "uid": req.body.user_key}, function (err, result) {
-//                 if (err) throw err;
-//                 callback(null, result)
-//             });
-//         },
-//         function (result, callback) {
-//             var execute;
-//             if (result) {
-//               var request = nlpapp.textRequest(req.body.content, {
-//                   sessionId: req.body.user_key
-//               });
-//
-//               request.on('response', function(response) {
-//                 db.collection('users').findOne({ "uid": req.body.user_key }, function (err, doc) {
-//                     if (err) throw err;
-//                     callback(null, (functionSheet[doc.messagePriority] || functionSheet[req.body.content] || functionSheet[response.result.metadata.intentName] || functionSheet["HeuristicResponse"]));
-//                 });
-//               });
-//
-//               request.on('error', function(error) {
-//                 callback(null, (functionSheet[doc.messagePriority] || functionSheet[req.body.content] || functionSheet["HeuristicResponse"]));
-//               });
-//
-//               request.end();
-//
-//             } else {
-//                 callback(null, functionSheet["newBuddy"]);
-//             }
-//         },
-//         function (execute, callback) {
-//             execute(req, res, db);
-//             callback(null);
-//         }];
-//
-//     async.waterfall(task);
-// });
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
