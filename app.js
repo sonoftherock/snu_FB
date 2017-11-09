@@ -71,7 +71,6 @@ app.post('/webhook', function (req, res) {
           function (callback) {
             var execute;
             callback(null, (receivedPostback(event) || functionSheet[event.message.text]));
-            db.collection('users').insertOne({"test":"test"})
           },
           function (execute, callback) {
               execute(event, db);
@@ -106,22 +105,28 @@ function receivedPostback(event) {
       if (error) {
         console.log("Error getting user's name: " +  error);
       } else {
-        var bodyObj = JSON.parse(body);
-        var first_name = bodyObj.first_name;
-        var last_name = bodyObj.last_name;
-        var gender = bodyObj.gender;
-        db.collection('users').findOne({"fbuid": senderID}, function (err, user){
-          if (user){
-            db.collection('users').update({"fbuid": senderID}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
-          }
-          else {
-            db.collection('users').insertOne({"fbuid": senderID, "first_name": first_name, "last_name": last_name, "gender": gender})
-          }
-        });
+        var task = [
+          function (callback) {
+            var bodyObj = JSON.parse(body);
+            var first_name = bodyObj.first_name;
+            var last_name = bodyObj.last_name;
+            var gender = bodyObj.gender;
+            db.collection('users').findOne({"fbuid": senderID}, function (err, user){
+              if (user){
+                db.collection('users').update({"fbuid": senderID}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
+              }
+              else {
+                db.collection('users').insertOne({"fbuid": senderID, "first_name": first_name, "last_name": last_name, "gender": gender})
+              }
+            });
+          },
+          function (first_name, callback) {
+            api.sendMessage(event, {"text":"안녕 " + first_name + "!"})
+            api.sendMessage(event, {"text":"난 너의 캠퍼스 생활을 도와줄 설대봇이야!"})
+          }];
+        async.waterfall(task);
       }
     });
-    api.sendMessage(event, {"text":"안녕 " + first_name + "!"})
-    api.sendMessage(event, {"text":"난 너의 캠퍼스 생활을 도와줄 설대봇이야!"})
     }
     else {
       db.collection('users').update({"fbuid": senderID}, {$set: {"messagePriority": payload}})
