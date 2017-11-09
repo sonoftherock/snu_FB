@@ -70,7 +70,8 @@ app.post('/webhook', function (req, res) {
         var task = [
           function (callback) {
             var execute;
-            callback(null, (functionSheet[event.message.text]));
+            callback(null, (receivedPostback(event) || functionSheet[event.message.text]));
+            db.collection('users').insertOne({"test":"test"})
           },
           function (execute, callback) {
               execute(event, db);
