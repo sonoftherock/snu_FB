@@ -66,7 +66,7 @@ var sendBabMenu = function(event, db){
                //async
                babMenu.push(JSON.parse(body).stores[i].menus[j].name);
              }
-             var messageData = {"text": "오늘의 메뉴는 " + babMenu[0] + "," + babMenu[1] + "야." };
+             var messageData = {"text": "오늘의 메뉴는 " + babMenu[0] + ", " + babMenu[1] + "야." };
              api.sendMessage(event, messageData);
              api.sendMessage(event, {"text": "존맛이겠다 ㅎㅎ"});
            }
