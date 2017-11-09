@@ -121,6 +121,7 @@ function receivedPostback(event) {
             });
           },
           function (first_name, callback) {
+            console.log("firstname")
             api.sendMessage(event, {"text":"안녕 " + first_name + "!"})
             api.sendMessage(event, {"text":"난 너의 캠퍼스 생활을 도와줄 설대봇이야!"})
           }];
