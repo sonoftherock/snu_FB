@@ -63,11 +63,10 @@ function watson(message){
   var conversation = new ConversationV1({
     username: 'e7c18156-a871-4523-90db-02af36cc117e', // replace with username from service key
     password: 'yNNowTXsrKXN', // replace with password from service key
-    path: { workspace_id: 'b0b3b9cb-4345-4f82-83b7-9c8776be0ddc' }, // replace with workspace ID
+    path: { workspace_id: '4d472b8b-cae7-4870-b074-e052ca47c0ca' }, // replace with workspace ID
     version_date: '2017-05-26'
   });
 
-  // Start conversation with empty message.
   conversation.message({message}, processResponse);
 
   // Process the conversation response.
@@ -79,6 +78,7 @@ function watson(message){
 
     // Display the output from dialog, if any.
     if (response.output.text.length != 0) {
+      console.log("Watson alive")
         var messageData = {"text": response.output.text[0]};
         api.sendMessage(event, messageData);
     }
