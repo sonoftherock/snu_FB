@@ -42,6 +42,7 @@ request({
   }
 });
 
+// Connect to webhook
 app.get('/webhook', function(req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
       req.query['hub.verify_token'] === 'ZoavjtmQjel17ai') {
@@ -53,6 +54,7 @@ app.get('/webhook', function(req, res) {
   }
 });
 
+// Post Messages
 app.post('/webhook', function (req, res) {
   var data = req.body;
 
