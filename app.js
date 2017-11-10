@@ -97,8 +97,8 @@ app.post('/webhook', function (req, res) {
 var utc = new Date().setUTCHours(28);
 var todayDate = new Date(utc).toISOString();
 
-if (todayDate.slice(0,16) == "2017-11-11T05:00"){
-  api.sendMessage({text: "거의 11시야"});
+if (todayDate.slice(0,16) == "2017-11-11T05:02"){
+  console.log({text: "거의 11시야"});
 } else {
   console.log('not yet')
 }
