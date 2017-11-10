@@ -97,12 +97,11 @@ app.post('/webhook', function (req, res) {
 var utc = new Date().setUTCHours(28);
 var todayDate = new Date(utc).toISOString();
 
-if (todayDate.slice(0,16) == "2017-11-11T04:50"){
+if (todayDate.slice(0,16) == "2017-11-11T04:54"){
   api.sendMessage({text: "거의 11시야"});
 } else {
   console.log('not yet')
 }
-
 
 // "시작하기" 버튼 처리 - 유저 등록
 function receivedPostback(event) {
