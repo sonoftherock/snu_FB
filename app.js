@@ -3,6 +3,7 @@ var bodyParser = require("body-parser");
 var request = require("request");
 var mongodb = require('mongodb');
 var functionSheet = require('./functionSheet');
+var cron = require('cron');
 // var path = require('path');
 var api = require('./apiCalls')
 var async = require('async');
@@ -93,13 +94,10 @@ app.post('/webhook', function (req, res) {
   }
 });
 
-while (true) {
-  var utc = new Date().setUTCHours(28);
-  var todayDate = new Date(utc).toISOString();
-  if (todayDate.slice(0,16) == "2017-11-11T05:11"){
-    api.sendMessage({text: "시간이 다 됐어"});
-  }
-}
+var CronJob = cron.CronJob;
+new CronJob('00 25 23 * * 1-5', function() {
+    api.sendMessage({text: '시간이 다 됐어!'});
+}, null, true, 'America/New_York');
 
 // "시작하기" 버튼 처리 - 유저 등록
 function receivedPostback(event) {
