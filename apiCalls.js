@@ -81,3 +81,4 @@ function callSendAPI(messageData) {
 
 module.exports.sendResponse = sendResponse;
 module.exports.callUserProfileAPI = callUserProfileAPI;
+module.exports.sendMessage = sendMessage;
