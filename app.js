@@ -94,7 +94,7 @@ app.post('/webhook', function (req, res) {
   }
 });
 
-//"시작하기" 버튼 처리 - 유저 등록
+// "시작하기" 버튼 처리 - 유저 등록
 function receivedPostback(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
