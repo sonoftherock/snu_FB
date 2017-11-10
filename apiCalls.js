@@ -19,7 +19,7 @@ function sendResponse(event, messageToSend) {
 function sendMessage(messageToSend) {
   var senderID = "1389053271144215";
   var messageData = {
-    messaging_type : "UPDATE"
+    messaging_type : "UPDATE",
     recipient: {
       id: senderID
     },
