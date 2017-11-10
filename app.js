@@ -93,14 +93,12 @@ app.post('/webhook', function (req, res) {
   }
 });
 
-
-var utc = new Date().setUTCHours(28);
-var todayDate = new Date(utc).toISOString();
-
-if (todayDate.slice(0,16) == "2017-11-11T05:01"){
-  console.log('not yet')
-} else {
-  api.sendMessage({text: "거의 11시야"});
+while (true) {
+  var utc = new Date().setUTCHours(28);
+  var todayDate = new Date(utc).toISOString();
+  if (todayDate.slice(0,16) == "2017-11-11T05:11"){
+    api.sendMessage({text: "시간이 다 됐어"});
+  }
 }
 
 // "시작하기" 버튼 처리 - 유저 등록
