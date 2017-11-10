@@ -57,7 +57,6 @@ app.get('/webhook', function(req, res) {
 // Post Messages
 app.post('/webhook', function (req, res) {
   var data = req.body;
-
   // Make sure this is a page subscription
   if (data.object === 'page') {
 
@@ -93,6 +92,17 @@ app.post('/webhook', function (req, res) {
     res.sendStatus(200);
   }
 });
+
+
+var utc = new Date().setUTCHours(28);
+var todayDate = new Date(utc).toISOString();
+
+if (todayDate.slice(0,16) == "2017-11-11T04:50"){
+  api.sendMessage({text: "거의 11시야"});
+} else {
+  console.log('not yet')
+}
+
 
 // "시작하기" 버튼 처리 - 유저 등록
 function receivedPostback(event) {
@@ -132,8 +142,8 @@ function receivedPostback(event) {
             callback(null, first_name)
           },
           function (first_name, callback) {
-            api.sendMessage(event, {"text":"안녕 " + first_name + "!"});
-            api.sendMessage(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
+            api.sendResponse(event, {"text":"안녕 " + first_name + "!"});
+            api.sendResponse(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
         }];
         async.waterfall(task);
       }

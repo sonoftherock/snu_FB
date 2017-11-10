@@ -30,7 +30,7 @@ var whichSikdang = function(event, db){
         });
       }
       var messageData = {"text": "어디서 먹을건데?", "quick_replies": sikdang };
-      api.sendMessage(event, messageData);
+      api.sendResponse(event, messageData);
       db.collection('users').update({ "fbuid": event.sender.id }, { $set: { "messagePriority": "sendBabMenu"} }, function(err, doc){
           if(err) throw err;
       });
@@ -59,7 +59,7 @@ var sendBabMenu = function(event, db){
        for (i = 0; i < 11; i++){
          if (JSON.parse(body).stores[i].name == event.message.text){
            if (JSON.parse(body).stores[i].menus.length == 0){
-             api.sendMessage(event, {"text": "오늘 여기는 밥이 안나와 다른데 가서 머거"});
+             api.sendResponse(event, {"text": "오늘 여기는 밥이 안나와 다른데 가서 머거"});
            }
            else{
              for (j = 0; j < 2; j++){
@@ -67,8 +67,8 @@ var sendBabMenu = function(event, db){
                babMenu.push(JSON.parse(body).stores[i].menus[j].name);
              }
              var messageData = {"text": "오늘의 메뉴는 " + babMenu[0] + ", " + babMenu[1] + "야." };
-             api.sendMessage(event, messageData);
-             api.sendMessage(event, {"text": "존맛이겠다 ㅎㅎ"});
+             api.sendResponse(event, messageData);
+             api.sendResponse(event, {"text": "존맛이겠다 ㅎㅎ"});
            }
          };
        }

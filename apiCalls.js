@@ -2,12 +2,24 @@ var request = require("request");
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
 //보내기 (res.send와 동일)
-function sendMessage(event, messageToSend) {
+function sendResponse(event, messageToSend) {
   var senderID = event.sender.id;
   var timeOfMessage = event.timestamp;
   var message = event.message;
 
   var messageData = {
+    recipient: {
+      id: senderID
+    },
+    message: messageToSend
+  };
+  callSendAPI(messageData);
+}
+
+function sendMessage(messageToSend) {
+  var senderID = "1389053271144215";
+  var messageData = {
+    messaging_type : UPDATE
     recipient: {
       id: senderID
     },
@@ -67,5 +79,5 @@ function callSendAPI(messageData) {
   });
 }
 
-module.exports.sendMessage = sendMessage;
+module.exports.sendResponse = sendResponse;
 module.exports.callUserProfileAPI = callUserProfileAPI;
