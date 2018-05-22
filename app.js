@@ -1,10 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var request = require("request");
-var mongodb = require('mongodb');
 var functionSheet = require('./functionSheet');
-var cron = require('cron');
-// var path = require('path');
 var api = require('./apiCalls')
 var async = require('async');
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
@@ -13,12 +10,7 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 // var nlpapp = apiai("3d2a930932f6409e90ce7cddbe99c3fc");
 
 var app = express();
-var ObjectID = mongodb.ObjectID;
-
 app.use(bodyParser.json());
-
-var db;
-var config = require('./Schema/config');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -94,11 +86,6 @@ app.post('/webhook', function (req, res) {
   }
 });
 
-var CronJob = cron.CronJob;
-new CronJob('00 25 23 * * 1-5', function() {
-    api.sendMessage({text: '시간이 다 됐어!'});
-}, null, true, 'America/New_York');
-
 // "시작하기" 버튼 처리 - 유저 등록
 function receivedPostback(event) {
   var senderID = event.sender.id;
@@ -126,14 +113,7 @@ function receivedPostback(event) {
             var first_name = bodyObj.first_name;
             var last_name = bodyObj.last_name;
             var gender = bodyObj.gender;
-            db.collection('users').findOne({"fbuid": senderID}, function (err, user){
-              if (user){
-                db.collection('users').update({"fbuid": senderID}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
-              }
-              else {
-                db.collection('users').insertOne({"fbuid": senderID, "first_name": first_name, "last_name": last_name, "gender": gender})
-              }
-            });
+
             callback(null, first_name)
           },
           function (first_name, callback) {
@@ -145,12 +125,9 @@ function receivedPostback(event) {
     });
     }
     else {
-      db.collection('users').update({"fbuid": senderID}, {$set: {"messagePriority": payload}})
     }
 }
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
-    require('./database').init(app, config);
-    db = app.get('database');
 });
