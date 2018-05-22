@@ -1,7 +1,7 @@
 var request = require("request");
 var api = require("./apiCalls")
 var findMeeting = function(){
-  var messageData =  {"text": "어디서 먹을건데?"};
+  var messageData =  {"text": "미팅?"};
   api.sendResponse(event, messageData);
 };
 
