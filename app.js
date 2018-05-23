@@ -13,7 +13,7 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
 var app = express();
 app.use(bodyParser.json());
-var connection = mysql.createConnection('hi');
+var connection = mysql.createConnection(process.env.DATABASE_URL);
 app.set('port', (process.env.PORT || 5000));
 
 //시작하기 버튼
