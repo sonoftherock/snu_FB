@@ -21,7 +21,7 @@ var connection = mysql.createConnection({
         port: 3306,
         user: 'campus_buddy',
         password: 'zoa1vj2tm3qjel!',
-        database: 'campusbuddies-001',
+        database: 'campusbuddies-001'
 });
 
 //시작하기 버튼
