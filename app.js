@@ -13,15 +13,7 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
 var app = express();
 app.use(bodyParser.json());
-console.log(process.env.DATABASE_URL);
-// var connection = mysql.createConnection({
-//   host : 'db-o2np.pub-cdb.ntruss.com',
-//   user : 'campus_buddy',
-//   password: 'temporary123!',
-//   port : 3306,
-//   database: 'campusbuddies-001'
-// })
-// connection.connect();
+var connection = mysql.createConnection(process.env.DATABASE_URL);
 
 app.set('port', (process.env.PORT || 5000));
 
