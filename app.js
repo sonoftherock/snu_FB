@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 
 var connection = mysql.createConnection({
   host : 'db-o2np.pub-cdb.ntruss.com',
+  port : 3306,
   user : 'campus_buddy',
   password: 'zoa1vj2tm3qjel!',
   database: 'campusbuddies-001'
