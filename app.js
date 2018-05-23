@@ -61,8 +61,8 @@ app.post('/webhook', function (req, res) {
 
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
-        var senderID = event.sender.id;
-        functionSheet[data.content];
+        // var senderID = event.sender.id;
+        meeting.findMeeting(event);
         // receivedPostback(event);
       });
     });
