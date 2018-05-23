@@ -67,6 +67,8 @@ app.post('/webhook', function (req, res) {
     });
     // Assume all went well.
     res.sendStatus(200);
+  } else {
+    res.sendStatus(404);
   }
 });
 
