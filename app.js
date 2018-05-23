@@ -16,9 +16,9 @@ app.use(bodyParser.json());
 console.log(process.env.DATABASE_URL);
 // var connection = mysql.createConnection({
 //   host : 'db-o2np.pub-cdb.ntruss.com',
-//   port : 3306,
 //   user : 'campus_buddy',
 //   password: 'temporary123!',
+//   port : 3306,
 //   database: 'campusbuddies-001'
 // })
 // connection.connect();
@@ -129,4 +129,6 @@ function receivedPostback(event) {
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
+    console.log(process.env.DATABASE_URL);
+
 });
