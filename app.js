@@ -62,24 +62,7 @@ app.post('/webhook', function (req, res) {
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
         var senderID = event.sender.id;
-        db.collection('users').findOne({"fbuid": senderID}, function(err, user){
-          if (user) {
-            var task = [
-              function (callback) {
-                var execute;
-                callback(null, (functionSheet[event.message.text]));
-              },
-              function (execute, callback) {
-                execute(event, db);
-                callback(null);
-              }];
-            async.waterfall(task);
-          }
-          else{
-            receivedPostback(event);
-          }
-        });
-
+        receivedPostback(event);
       });
     });
     // Assume all went well.
