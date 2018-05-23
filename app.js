@@ -5,6 +5,7 @@ var functionSheet = require('./functionSheet');
 var meeting = require('./meeting');
 var api = require('./apiCalls')
 var async = require('async');
+var mysql = require("mysql2");
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
 // var apiai = require('apiai');
@@ -14,6 +15,14 @@ var app = express();
 app.use(bodyParser.json());
 
 app.set('port', (process.env.PORT || 5000));
+
+var connection = mysql.createConnection({
+        host: 'db-o2np.pub-cdb.ntruss.com',
+        port: 3306,
+        user: 'campus_buddy',
+        password: 'zoa1vj2tm3qjel!',
+        database: 'campusbuddies-001',
+});
 
 //시작하기 버튼
 request({
