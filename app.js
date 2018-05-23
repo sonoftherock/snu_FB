@@ -16,15 +16,6 @@ app.use(bodyParser.json());
 
 app.set('port', (process.env.PORT || 5000));
 
-var connection = mysql.createConnection({
-  host: 'db-o2np.pub-cdb.ntruss.com',
-  port: 3306,
-  user: 'campus_buddy',
-  password: 'zoa1vj2tm3qjel!',
-  database: 'campusbuddies-001'
-});
-connection.connect();
-
 //시작하기 버튼
 request({
   uri: 'https://graph.facebook.com/v2.6/me/messenger_profile',
