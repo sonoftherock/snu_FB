@@ -65,7 +65,7 @@ app.post('/webhook', function (req, res) {
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
         // var senderID = event.sender.id;
-        connection.query('INSERT INTO users (user_id) VALUES ('hello')');
+        connection.query('INSERT INTO users SET user_id=10');
         meeting.findMeeting(event);
         // receivedPostback(event);
       });
