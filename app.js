@@ -62,7 +62,8 @@ app.post('/webhook', function (req, res) {
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
         var senderID = event.sender.id;
-        receivedPostback(event);
+        functionSheet[data.content];
+        // receivedPostback(event);
       });
     });
     // Assume all went well.
@@ -111,6 +112,7 @@ function receivedPostback(event) {
     });
     }
     else {
+
     }
 }
 
