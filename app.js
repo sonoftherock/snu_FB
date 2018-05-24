@@ -69,7 +69,7 @@ app.post('/webhook', function (req, res) {
           if (err) throw err;
           if (result.length > 0){
             console.log(event.message.text + ' ' + event.sender.id);
-            var apiaiSession = nlpapp.textRequest("안녕", {
+            var apiaiSession = nlpapp.textRequest("'" + event.message.text + "'", {
                 sessionId: event.sender.id
             });
             apiaiSession.on('response', function(response) {
