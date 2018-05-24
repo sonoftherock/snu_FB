@@ -57,7 +57,6 @@ function handleWebview(event) {
         }
       }
     };
-    console.log("HANDLEWEBVIEW");
     callSendAPI(messageData);
 }
 

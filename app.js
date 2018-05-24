@@ -9,8 +9,8 @@ var async = require('async');
 var mysql = require("mysql");
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
-// var apiai = require('apiai');
-// var nlpapp = apiai("3d2a930932f6409e90ce7cddbe99c3fc");
+var apiai = require('apiai');
+var nlpapp = apiai("3d2a930932f6409e90ce7cddbe99c3fc");
 
 var app = express();
 app.use(bodyParser.json());
@@ -68,7 +68,14 @@ app.post('/webhook', function (req, res) {
         connection.query('SELECT * FROM Users WHERE user_id=' + event.sender.id, function (err, result, fields) {
           if (err) throw err;
           if (result.length > 0){
-            api.handleWebview(event);
+            var request = nlpapp.textRequest(event.message, {
+                sessionId: event.sender.id
+            });
+            request.on('response', function(response) {
+              console.log(response);
+            });
+            api.sendResponse(event, {"text": response})
+            // api.handleWebview(event);
             // meeting.findMeeting(event);
           } else {
             receivedPostback(event);
