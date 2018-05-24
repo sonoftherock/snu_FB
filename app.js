@@ -1,6 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var request = require("request");
+var util = require("util");
 var functionSheet = require('./functionSheet');
 var meeting = require('./meeting');
 var api = require('./apiCalls')
@@ -108,7 +109,7 @@ function receivedPostback(event) {
             var first_name = bodyObj.first_name;
             var last_name = bodyObj.last_name;
             var gender = bodyObj.gender;
-            connection.query("INSERT INTO Users (user_id, first_name, last_name, sex) VALUES(" + event.sender.id + "," + first_name + "," + last_name + "," + gender ")");
+            connection.query('INSERT INTO Users (user_id, first_name, last_name, sex) VALUES ('+ event.sender.id + ')' );
             callback(null, first_name)
           },
           function (first_name, callback) {
