@@ -16,8 +16,8 @@ function sendResponse(event, messageToSend) {
   callSendAPI(messageData);
 }
 
-function sendMessage(messageToSend) {
-  var senderID = "1389053271144215";
+function sendMessage(event, messageToSend) {
+  var senderID = event.sender.id;
   var messageData = {
     messaging_type : "UPDATE",
     recipient: {
@@ -28,35 +28,37 @@ function sendMessage(messageToSend) {
   callSendAPI(messageData);
 }
 
-//유저 정보 읽기
-function callUserProfileAPI(senderID){
-   request({
-     url: "https://graph.facebook.com/v2.6/" + senderID,
-     qs: {
-       access_token: process.env.PAGE_ACCESS_TOKEN,
-       locale: "ko_KR",
-       fields: "first_name,last_name,gender"
-     },
-     method: "GET"
-   }, function(error, response, body) {
-     if (error) {
-       console.log("Error getting user's name: " +  error);
-     } else {
-       var bodyObj = JSON.parse(body);
-       first_name = bodyObj.first_name;
-       last_name = bodyObj.last_name;
-       gender = bodyObj.gender;
-       db.collection('users', function (err, user) {
-         if (user) {
-           db.collection('users').update({"fbuid": senderID}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
-         }
-         else {
-           db.collection('users').insertOne({"fbuid": senderID, "first_name": first_name, "last_name": last_name, "gender": gender})
-         }
-       })
-     }
-     return [first_name, last_name, gender];
-   });
+function handleWebview(event) {
+  var senderID = event.sender.id;
+    let messageData = {
+      recipient: {
+        id: senderID
+      },
+      message: {
+        "attachment":{
+          "payload":{
+            "elements":[{
+              "buttons": [
+                {
+                  "title":"Compact: Hoomba",
+                  "type":"web_url",
+                  "url":"http://wiki.dcinside.com/wiki/%ED%9B%94%EB%B0%94%ED%9B%94%EB%B0%94",
+                  "webview_height_ratio":"compact"
+                },
+              ],
+              "image_url": "http://www.example.com/image.png",
+              "item_url": "http://www.example.com",
+              "subtitle":"let's go!",
+              "title":"Some URL"
+            }],
+            "template_type":"generic"
+          },
+          "type":"template"
+        }
+      }
+    };
+    console.log("HANDLEWEBVIEW");
+    callSendAPI(messageData);
 }
 
 // 메시지 보내기
@@ -80,5 +82,5 @@ function callSendAPI(messageData) {
 }
 
 module.exports.sendResponse = sendResponse;
-module.exports.callUserProfileAPI = callUserProfileAPI;
+module.exports.handleWebview = handleWebview;
 module.exports.sendMessage = sendMessage;
