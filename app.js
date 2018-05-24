@@ -110,7 +110,7 @@ function receivedPostback(event) {
             var last_name = bodyObj.last_name;
             var gender = bodyObj.gender;
             console.log(event.sender.id);
-            connection.query('INSERT INTO Users (user_id, first_name) VALUES ('+ event.sender.id + ',' + first_name ')' );
+            connection.query('INSERT INTO Users (user_id, first_name) VALUES ('+ event.sender.id + ', "trevor")');
             callback(null, first_name)
           },
           function (first_name, callback) {
