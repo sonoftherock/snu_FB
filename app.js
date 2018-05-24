@@ -69,10 +69,10 @@ app.post('/webhook', function (req, res) {
           if (err) throw err;
           if (result.length > 0){
             console.log(event.message.text + ' ' + event.sender.id);
-            var request = nlpapp.textRequest(event.message.text, {
+            var apiaiSession = nlpapp.textRequest(event.message.text, {
                 sessionId: event.sender.id
             });
-            request.on('response', function(response) {
+            apiaiSession.on('response', function(response) {
               console.log(response);
               console.log(response.result);
 
