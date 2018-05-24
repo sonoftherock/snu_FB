@@ -73,8 +73,8 @@ app.post('/webhook', function (req, res) {
             });
             request.on('response', function(response) {
               console.log(response);
+              api.sendResponse(event, {"text": response})
             });
-            api.sendResponse(event, {"text": response})
             // api.handleWebview(event);
             // meeting.findMeeting(event);
           } else {
