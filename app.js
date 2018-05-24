@@ -75,7 +75,7 @@ app.post('/webhook', function (req, res) {
             apiaiSession.on('response', function(response) {
               // console.log(response);
 
-              var response_text = response.result.metadata.intentName;
+              var response_text = response.result.fulfillment.speech;
               console.log(response_text);
               api.sendResponse(event, {"text": response_text})
             });
