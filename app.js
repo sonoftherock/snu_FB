@@ -68,6 +68,7 @@ app.post('/webhook', function (req, res) {
         connection.query('SELECT * FROM Users WHERE user_id=' + event.sender.id, function (err, result, fields) {
           if (err) throw err;
           if (result.length > 0){
+            console.log(event.message + ' ' + event.sender.id);
             var request = nlpapp.textRequest(event.message, {
                 sessionId: event.sender.id
             });
