@@ -67,6 +67,7 @@ app.post('/webhook', function (req, res) {
         connection.query('SELECT * FROM Users WHERE user_id=' + event.sender.id, function (err, result, fields) {
           if (err) throw err;
           if (result){
+            console.log(result);
             meeting.findMeeting(event);
           } else {
             receivedPostback(event);
