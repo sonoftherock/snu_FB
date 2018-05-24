@@ -73,6 +73,9 @@ app.post('/webhook', function (req, res) {
                 sessionId: event.sender.id
             });
             request.on('response', function(response) {
+              console.log(response);
+              console.log(response.result);
+
               var response_text = response.result.fulfillment.speech;
               console.log(response_text);
               api.sendResponse(event, {"text": response_text})
