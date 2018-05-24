@@ -64,9 +64,14 @@ app.post('/webhook', function (req, res) {
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
         // var senderID = event.sender.id;
-        connection.query('INSERT INTO users SET user_id=10');
-        meeting.findMeeting(event);
-        // receivedPostback(event);
+        connection.query('SELECT * FROM Users WHERE user_id=' + event.sender.id, function (err, result, fields) {
+          if (err) throw err;
+          if (result == NULL){
+            receivedPostback(event);
+          } else {
+            meeting.findMeeting(event);
+          }
+        });
       });
     });
     // Assume all went well.
@@ -103,7 +108,7 @@ function receivedPostback(event) {
             var first_name = bodyObj.first_name;
             var last_name = bodyObj.last_name;
             var gender = bodyObj.gender;
-
+            connection.query('INSERT INTO Users SET user_id=' + event.sender.id + ', first_name=' + first_name + ', last_name=' + last_name + ', sex=' + gender);
             callback(null, first_name)
           },
           function (first_name, callback) {
