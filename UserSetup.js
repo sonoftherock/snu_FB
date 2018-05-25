@@ -41,7 +41,18 @@ function registerUser(event) {
 }
 
 var register1 = function(event) {
-
+  task = [
+    function(callback){
+      connection.query('UPDATE Users SET context=register2 WHERE user_id=' + event.sender.id);
+      connection.query('UPDATE Users SET college_major=' + event.message.text);
+      callback(null, 'done');
+    },
+    function(err, result){
+      api.sendResponse(event, {"text":"밥 굶겠다.."});
+      callback(null);
+    }
+  ]
+  async.waterfall(task);
 }
 
 module.exports = {

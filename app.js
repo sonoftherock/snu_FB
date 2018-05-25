@@ -39,7 +39,7 @@ request({
 // Connect to webhook
 app.get('/webhook', function(req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
-      req.query['hub.verify_token'] === 'ZoavjtmQjel17ai') {
+      req.query['hub.verify_token'] === process.env.VERIFY_TOKEN) {
     console.log("Validating webhook");
     res.status(200).send(req.query['hub.challenge']);
   } else {
@@ -53,13 +53,9 @@ app.post('/webhook', function (req, res) {
   var data = req.body;
   // Make sure this is a page subscription
   if (data.object === 'page') {
-
-    // Iterate over each entry - there may be multiple if batched
     data.entry.forEach(function(entry) {
       var pageID = entry.id;
       var timeOfEvent = entry.time;
-
-      // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
         var task = [
           function(callback){
@@ -71,7 +67,7 @@ app.post('/webhook', function (req, res) {
             if (err) throw err;
             if (result.length > 0){
               if (result.context) {
-                callback(functionSheet[result.context]);
+                callback(null, functionSheet[result.context]);
               } else {
                 var apiaiSession = nlpapp.textRequest("'" + event.message.text + "'", {
                   sessionId: event.sender.id
