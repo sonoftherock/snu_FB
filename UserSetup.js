@@ -41,7 +41,7 @@ function registerUser(event) {
     });
 }
 
-var register1 = function(event) {
+function register1(event) {
   task = [
     function(callback){
       connection.query('UPDATE Users SET conv_context=register2 WHERE user_id=' + event.sender.id);
