@@ -123,11 +123,11 @@ function registerUser(event) {
             callback(null, first_name);
           },
           function (first_name, callback) {
-            api.sendResponse(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
-            callback(null, first_name);
+            console.log(api.sendResponse(event, {"text":"안녕 " + first_name + "!"}));
+            callback(null, 'end');
           },
           function (err, result) {
-            api.sendResponse(event, {"text":"안녕 " + first_name + "!"});
+            api.sendResponse(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
           }
         ];
         async.waterfall(task);
