@@ -85,6 +85,7 @@ function register2(event) {
 module.exports = {
   functionMatch: {
     "registerUser": registerUser,
-    "register1": register1
+    "register1": register1,
+    "register2": register2
   }
 }
