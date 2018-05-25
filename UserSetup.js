@@ -48,7 +48,7 @@ function register1(event) {
       connection.query('UPDATE Users SET college_major=' + event.message.text);
       callback(null, 'done');
     },
-    function(err, result){
+    function(err, callback){
       api.sendResponse(event, {"text":"밥 굶겠다.."});
       callback(null);
     }
