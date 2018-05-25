@@ -28,7 +28,7 @@ function registerUser(event) {
             var first_name = bodyObj.first_name;
             var last_name = bodyObj.last_name;
             var gender = bodyObj.gender;
-            connection.query('INSERT INTO Users (user_id, first_name, last_name, sex, conv_context) VALUES ('+ event.sender.id + ', "' + first_name + '","' + last_name + '","' + gender + '",' + "register1" + ')');
+            connection.query('INSERT INTO Users (user_id, first_name, last_name, sex, conv_context) VALUES ('+ event.sender.id + ', "' + first_name + '","' + last_name + '","' + gender + '",' + 'register1' + ')');
             callback(null, first_name);
           },
           function (first_name, callback) {
