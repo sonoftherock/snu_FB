@@ -43,7 +43,7 @@ function registerUser(event) {
 var register1 = function(event) {
   task = [
     function(callback){
-      connection.query('UPDATE Users SET context=register2 WHERE user_id=' + event.sender.id);
+      connection.query('UPDATE Users SET conv_context=register2 WHERE user_id=' + event.sender.id);
       connection.query('UPDATE Users SET college_major=' + event.message.text);
       callback(null, 'done');
     },
