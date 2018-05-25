@@ -105,7 +105,7 @@ function registerUser(event) {
       qs: {
         access_token: process.env.PAGE_ACCESS_TOKEN,
         locale: "ko_KR",
-        fields: "first_name,last_name,gender"
+        fields: "first_name,last_name,gender,education"
       },
       method: "GET"
     }, function(error, response, body) {
@@ -118,7 +118,8 @@ function registerUser(event) {
             var first_name = bodyObj.first_name;
             var last_name = bodyObj.last_name;
             var gender = bodyObj.gender;
-            console.log(event.sender.id);
+            var education = bodyObj.education;
+            console.log(education);
             connection.query('INSERT INTO Users (user_id, first_name, last_name, sex) VALUES ('+ event.sender.id + ', "' + first_name + '","' + last_name + '","' + gender + '")');
             callback(null, first_name);
           },
@@ -128,6 +129,10 @@ function registerUser(event) {
           },
           function (err, result) {
             api.sendResponse(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
+            api.sendResponse(event, {"text": "서울대 다니니?", "quick_replies": [
+              "content_type": "text",
+
+            ]});
           }
         ];
         async.waterfall(task);
