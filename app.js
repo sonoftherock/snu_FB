@@ -118,17 +118,16 @@ function registerUser(event) {
             var first_name = bodyObj.first_name;
             var last_name = bodyObj.last_name;
             var gender = bodyObj.gender;
-            var education = bodyObj.education;
-            console.log(education);
+            // var education = bodyObj.education;
+            // console.log(education);
             connection.query('INSERT INTO Users (user_id, first_name, last_name, sex) VALUES ('+ event.sender.id + ', "' + first_name + '","' + last_name + '","' + gender + '")');
             callback(null, first_name);
           },
           function (first_name, callback) {
             console.log(api.sendResponse(event, {"text":"안녕 " + first_name + "!"}));
-            callback(null, 'end');
+            callback(null, 'school');
           },
-          function (err, result) {
-            api.sendResponse(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
+          function (school, callback){
             api.sendResponse(event, {"text": "서울대 다니니?", "quick_replies": [{
               "content_type": "text",
               "title": "응",
@@ -139,6 +138,10 @@ function registerUser(event) {
               "payload": "아니"
             }
             ]});
+            callback(null, 'end');
+          },
+          function (err, result) {
+            api.sendResponse(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
           }
         ];
         async.waterfall(task);
