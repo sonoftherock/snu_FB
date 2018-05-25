@@ -64,27 +64,29 @@ app.post('/webhook', function (req, res) {
         var task = [
           function(callback){
             connection.query('SELECT * FROM Users WHERE user_id=' + event.sender.id, function (err, result, fields) {
-              console.log(result);
               callback(null, err, result);
             })
           },
           function(err, result, callback){
             if (err) throw err;
             if (result.length > 0){
-              console.log(result);
-              var apiaiSession = nlpapp.textRequest("'" + event.message.text + "'", {
-                sessionId: event.sender.id
-              });
+              if (result.context) {
+                callback(functionSheet[result.context]);
+              } else {
+                var apiaiSession = nlpapp.textRequest("'" + event.message.text + "'", {
+                  sessionId: event.sender.id
+                });
 
-              apiaiSession.on('response', function(response) {
-                callback(null, functionSheet[response.result.metadata.intentName]);
-              });
+                apiaiSession.on('response', function(response) {
+                  callback(null, functionSheet["findMeeting"]);
+                });
 
-              apiaiSession.on('error', function(error) {
-                //handle errors
-              })
+                apiaiSession.on('error', function(error) {
+                  //handle errors
+                })
 
-              apiaiSession.end();
+                apiaiSession.end();
+              }
             } else {
               callback(null, functionSheet["registerUser"]);
             }
