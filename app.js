@@ -65,8 +65,8 @@ app.post('/webhook', function (req, res) {
         var task = [
           function(callback){
             connection.query('SELECT * FROM Users WHERE user_id=' + event.sender.id, function (err, result, fields) {
-              callback(null, err, result);
               console.log(result);
+              callback(null, err, result);
             })
           },
           function(err, result, callback){
