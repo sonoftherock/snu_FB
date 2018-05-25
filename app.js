@@ -83,7 +83,7 @@ app.post('/webhook', function (req, res) {
             apiaiSession.end();
             // meeting.findMeeting(event);
           } else {
-            receivedPostback(event);
+            registerUser(event);
           }
         });
       });
@@ -96,15 +96,11 @@ app.post('/webhook', function (req, res) {
 });
 
 // "시작하기" 버튼 처리 - 유저 등록
-function receivedPostback(event) {
+function registerUser(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfPostback = event.timestamp;
-
-  var payload = event.postback.payload;
-
-  if (payload == "<GET_STARTED_PAYLOAD>") {
-    request({
+  request({
       url: "https://graph.facebook.com/v2.6/" + senderID,
       qs: {
         access_token: process.env.PAGE_ACCESS_TOKEN,
@@ -127,20 +123,17 @@ function receivedPostback(event) {
             callback(null, first_name);
           },
           function (first_name, callback) {
+            var result = "";
             api.sendResponse(event, {"text":"안녕 " + first_name + "!"});
-            callback(null, first_name);
+            callback(null, result);
           },
-          function (first_name, callback) {
-            api.sendResponse(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
+          function (err, result) {
+            api.sendResponse(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!" + result});
           }
         ];
         async.waterfall(task);
       }
     });
-    }
-    else {
-
-    }
 }
 
 app.listen(app.get('port'), function () {
