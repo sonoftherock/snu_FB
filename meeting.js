@@ -7,6 +7,6 @@ var findMeeting = function(event){
 
 module.exports = {
   functionMatch: {
-    "findMeeting": findMeeting;
+    "findMeeting": findMeeting
   }
 }
