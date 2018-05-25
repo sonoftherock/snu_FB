@@ -80,6 +80,7 @@ function register2(event) {
       callback(null);
     }
   ]
+  async.waterfall(task);
 }
 
 module.exports = {
