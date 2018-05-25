@@ -10,7 +10,7 @@ var mysql = require("mysql");
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
 var apiai = require('apiai');
-var nlpapp = apiai("3d2a930932f6409e90ce7cddbe99c3fc");
+var nlpapp = apiai("542cfeef5714428193dc4478760de396");
 
 var app = express();
 app.use(bodyParser.json());
@@ -73,14 +73,14 @@ app.post('/webhook', function (req, res) {
                 sessionId: event.sender.id
             });
             apiaiSession.on('response', function(response) {
-              // console.log(response);
-
-              var response_text = response.result.fulfillment.speech;
-              console.log(response_text);
-              api.sendResponse(event, {"text": response_text})
+              if (response.result.metadata.intentName == "SeeMeeting"){
+                api.handleWebview(event);
+              } else {
+                var response_text = response.result.fulfillment.speech;
+                api.sendResponse(event, {"text": response_text})
+              }
             });
             apiaiSession.end();
-            // api.handleWebview(event);
             // meeting.findMeeting(event);
           } else {
             receivedPostback(event);
@@ -124,12 +124,16 @@ function receivedPostback(event) {
             var gender = bodyObj.gender;
             console.log(event.sender.id);
             connection.query('INSERT INTO Users (user_id, first_name, last_name, sex) VALUES ('+ event.sender.id + ', "' + first_name + '","' + last_name + '","' + gender + '")');
-            callback(null, first_name)
+            callback(null, first_name);
           },
           function (first_name, callback) {
             api.sendResponse(event, {"text":"안녕 " + first_name + "!"});
+            callback(null, first_name);
+          },
+          function (first_name, callback) {
             api.sendResponse(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
-        }];
+          }
+        ];
         async.waterfall(task);
       }
     });

@@ -60,6 +60,33 @@ function handleWebview(event) {
     callSendAPI(messageData);
 }
 
+function handleMediaTemplate(event) {
+  var senderID = event.sender.id;
+    let messageData;
+    messageData = {
+      recipient: {
+        id: senderID
+      },
+      message: {
+        "attachment": {
+          "type": "template",
+          "payload": {
+             "template_type": "media",
+             "elements": [
+                {
+                   "media_type": "video",
+                   "url": "https://www.facebook.com/afreecaTV.korea/videos/1742057972505275/"
+                }
+             ]
+          }
+        }
+      }
+    };
+    console.log("HANDLEMEDIATEMPLATE");
+    // Sends the response message
+    callSendAPI(messageData);
+}
+
 // 메시지 보내기
 function callSendAPI(messageData) {
   request({
