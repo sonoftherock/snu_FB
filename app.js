@@ -132,16 +132,12 @@ function registerUser(event) {
               "content_type": "text",
               "title": "응",
               "payload": "응"
-            }, {
-              "content_type": "text",
-              "title": "아니",
-              "payload": "아니"
             }
             ]});
             callback(null, 'end');
           },
           function (err, result) {
-            api.sendResponse(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
+            // api.sendResponse(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
           }
         ];
         async.waterfall(task);
