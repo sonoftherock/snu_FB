@@ -123,10 +123,10 @@ function registerUser(event) {
             connection.query('INSERT INTO Users (user_id, first_name, last_name, sex) VALUES ('+ event.sender.id + ', "' + first_name + '","' + last_name + '","' + gender + '")');
             callback(null, first_name);
           },
-          function (first_name, callback) {
-            console.log(api.sendResponse(event, {"text":"안녕 " + first_name + "!"}));
-            callback(null, 'school');
-          },
+          // function (first_name, callback) {
+          //   console.log(api.sendResponse(event, {"text":"안녕 " + first_name + "!"}));
+          //   callback(null, 'school');
+          // },
           function (school, callback){
             api.sendResponse(event, {"text": "서울대 다니니?", "quick_replies": [{
               "content_type": "text",
