@@ -122,13 +122,12 @@ function registerUser(event) {
             connection.query('INSERT INTO Users (user_id, first_name, last_name, sex) VALUES ('+ event.sender.id + ', "' + first_name + '","' + last_name + '","' + gender + '")');
             callback(null, first_name);
           },
-          function (err, result) {
-            api.sendResponse(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
-          },
           function (first_name, callback) {
-            var result = "";
+            api.sendResponse(event, {"text": "난 너의 캠퍼스 생활을 도와줄 설대봇이야!"});
+            callback(null, first_name);
+          },
+          function (err, result) {
             api.sendResponse(event, {"text":"안녕 " + first_name + "!"});
-            callback(null, result);
           }
         ];
         async.waterfall(task);
