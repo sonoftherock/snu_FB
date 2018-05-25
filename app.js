@@ -48,7 +48,6 @@ app.get('/webhook', function(req, res) {
   }
 });
 
-
 // Post Messages
 app.post('/webhook', function (req, res) {
   var data = req.body;
@@ -95,6 +94,7 @@ app.post('/webhook', function (req, res) {
             callback(null);
           }
         ]
+        async.waterfall(task);
       });
     });
     res.sendStatus(200);
