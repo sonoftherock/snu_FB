@@ -5,4 +5,8 @@ var findMeeting = function(event){
   api.sendResponse(event, messageData);
 };
 
-module.exports.findMeeting = findMeeting;
+module.exports = {
+  functionMatch: {
+    "findMeeting": findMeeting;
+  }
+}
