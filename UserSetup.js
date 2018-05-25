@@ -45,7 +45,7 @@ function register1(event) {
   if (event.message.text == "응"){
     var task = [
       function(callback){
-        connection.query('UPDATE Users SET conv_context=register2 WHERE user_id=' + event.sender.id);
+        connection.query('UPDATE Users SET conv_context="register2" WHERE user_id=' + event.sender.id);
         callback(null, 'done');
       },
       function(err, callback){
@@ -56,7 +56,7 @@ function register1(event) {
   } else {
     var task = [
       function(callback){
-        connection.query('UPDATE Users SET conv_context=notStudent WHERE user_id=' + event.sender.id);
+        connection.query('UPDATE Users SET conv_context="notStudent" WHERE user_id=' + event.sender.id);
         callback(null, 'done');
       },
       function(err, callback){
@@ -71,8 +71,8 @@ function register1(event) {
 function register2(event) {
   var task = [
     function(callback){
-      connection.query('UPDATE Users SET conv_context=register3 WHERE user_id=' + event.sender.id);
-      connection.query('UPDATE Users SET college_major=' + event.message.text + ' WHERE user_id=' + event.sender.id);
+      connection.query('UPDATE Users SET conv_context="register3" WHERE user_id=' + event.sender.id);
+      connection.query('UPDATE Users SET college_major=' + '"' + event.message.text + '"' + ' WHERE user_id=' + event.sender.id);
       callback(null, 'done');
     },
     function(err, callback){
