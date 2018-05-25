@@ -31,8 +31,9 @@ function registerUser(event) {
             connection.query('INSERT INTO Users (user_id, first_name, last_name, sex, context) VALUES ('+ event.sender.id + ', "' + first_name + '","' + last_name + '","' + gender + '",' + "register1" + ')');
             callback(null, first_name);
           },
-          function (err, result) {
+          function (first_name, result) {
             api.sendResponse(event, {"text":"안녕 " + first_name + "!\n난 설대봇이야. 서울대 다니니?", "quick_replies": quick_replies.YesOrNo});
+            callback(null);
           }
         ];
         async.waterfall(task);
