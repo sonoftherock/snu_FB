@@ -42,18 +42,44 @@ function registerUser(event) {
 }
 
 function register1(event) {
-  task = [
+  if (event.message.text == "응"){
+    var task = [
+      function(callback){
+        connection.query('UPDATE Users SET conv_context=register2 WHERE user_id=' + event.sender.id);
+        callback(null, 'done');
+      },
+      function(err, callback){
+        api.sendResponse(event, {"text":"무슨 과??"});
+        callback(null);
+      }
+    ]
+  } else {
+    var task = [
+      function(callback){
+        connection.query('UPDATE Users SET conv_context=notStudent WHERE user_id=' + event.sender.id);
+        callback(null, 'done');
+      },
+      function(err, callback){
+        api.sendResponse(event, {"text":"그럼 너희 학교 담당 봇한테 가!"});
+        callback(null);
+      }
+    ]
+  }
+  async.waterfall(task);
+}
+
+function register2(event) {
+  var task = [
     function(callback){
-      connection.query('UPDATE Users SET conv_context=register2 WHERE user_id=' + event.sender.id);
-      connection.query('UPDATE Users SET college_major=' + event.message.text);
+      connection.query('UPDATE Users SET conv_context=register3 WHERE user_id=' + event.sender.id);
+      connection.query('UPDATE Users SET college_major=' + event.message.text + ' WHERE user_id=' + event.sender.id);
       callback(null, 'done');
     },
     function(err, callback){
-      api.sendResponse(event, {"text":"밥 굶겠다.."});
+      api.sendResponse(event, {"text":"문송하네.. ㅠㅠ"});
       callback(null);
     }
   ]
-  async.waterfall(task);
 }
 
 module.exports = {
