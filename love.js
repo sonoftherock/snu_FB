@@ -2,19 +2,24 @@ var api = require("./apiCalls")
 var mysql = require('mysql');
 var connection = mysql.createConnection(process.env.DATABASE_URL);
 
-var n_to_n = function(event){
+function n_to_n(event){
   var messageData =  {"text": "너희 과에 미팅 들어온게 있네.. 같이 나갈 친구들이랑 단톡 만들어서 나 초대해주면 주선해줄게!"};
   api.sendResponse(event, messageData);
 };
 
-var one_to_one = function(event){
+function one_to_one(event){
   var messageData =  {"text": "소개팅?"};
   api.sendResponse(event, messageData);
 };
 
+function fallback(event){
+  api.sendResponse(event, {"text": "에비앙"});
+}
+
 module.exports = {
   functionMatch: {
     "미팅": n_to_n,
-    "소개팅": one_to_one
+    "소개팅": one_to_one,
+    "fallback": fallback
   }
 }
