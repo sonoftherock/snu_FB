@@ -39,7 +39,7 @@ function introduce_mentor(event){
 
 module.exports = {
   functionMatch: {
-    "멘토": "introduce_mentor",
+    "선배한테 조언": "introduce_mentor",
     "query_demand1": "query_demand1",
     "query_demand2": "query_demand2"
   }
