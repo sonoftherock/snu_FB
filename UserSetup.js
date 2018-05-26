@@ -1,5 +1,5 @@
 var request = require("request");
-var quick_replies = require('./quick_replies');
+var qr = require('./quick_replies');
 var api = require('./apiCalls')
 var async = require('async');
 var mysql = require("mysql");
@@ -28,11 +28,15 @@ function registerUser(event) {
             var first_name = bodyObj.first_name;
             var last_name = bodyObj.last_name;
             var gender = bodyObj.gender;
-            connection.query('INSERT INTO Users (user_id, first_name, last_name, sex, conv_context) VALUES ('+ event.sender.id + ', "' + first_name + '","' + last_name + '","' + gender + '",' + '"register1"' + ')');
+            connection.query('SELECT * FROM Users WHERE user_id=' + senderID, function(err, result, fields) {
+              if (result.length == 0){
+                connection.query('INSERT INTO Users (user_id, first_name, last_name, sex, conv_context) VALUES ('+ event.sender.id + ', "' + first_name + '","' + last_name + '","' + gender + '",' + '"register1"' + ')');
+              }
+            } );
             callback(null, first_name);
           },
           function (first_name, callback) {
-            api.sendResponse(event, {"text":"안녕 " + first_name + "!\n난 설대봇이야. 서울대 다니니?", "quick_replies": quick_replies.YesOrNo});
+            api.sendResponse(event, {"text":"안녕 " + first_name + "!\n난 설대봇이야. 서울대 다니니?", "quick_replies": qr.YesOrNo});
             callback(null);
           }
         ];
@@ -71,22 +75,28 @@ function register1(event) {
 function register2(event) {
   var task = [
     function(callback){
-      connection.query('UPDATE Users SET conv_context="register3" WHERE user_id=' + event.sender.id);
+      connection.query('UPDATE Users SET conv_context="none" WHERE user_id=' + event.sender.id);
       connection.query('UPDATE Users SET college_major=' + '"' + event.message.text + '"' + ' WHERE user_id=' + event.sender.id);
       callback(null, 'done');
     },
     function(err, callback){
-      api.sendResponse(event, {"text":"문송하네.. ㅠㅠ"});
+      api.sendResponse(event, {"text":"문송하네.. ㅠㅠ 뭐 쨌든 나는 캠퍼스 최고의 인싸 (이름)이야.\n너가 조언을 구하거나 만나고 싶은 사람이 있다면 말만 해! 소개시켜줄게 :~)",
+        "quick_replies": qr.reply_arrays["Menu"]});
       callback(null);
     }
   ]
   async.waterfall(task);
 }
 
+function notStudent(event) {
+  api.sendResponse(event, {"text": "나는 서울대 담당이니까 너희 학교 봇한테 말 걸어줘"})
+}
+
 module.exports = {
   functionMatch: {
     "registerUser": registerUser,
     "register1": register1,
-    "register2": register2
+    "register2": register2,
+    "notStudent": notStudent
   }
 }

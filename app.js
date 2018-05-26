@@ -66,7 +66,7 @@ app.post('/webhook', function (req, res) {
           function(err, result, callback){
             if (err) throw err;
             if (result.length > 0){
-              if (result[0].conv_context) {
+              if (result[0].conv_context != "none") {
                 callback(null, functionSheet[result[0].conv_context]);
               } else {
                 var apiaiSession = nlpapp.textRequest("'" + event.message.text + "'", {
@@ -74,7 +74,7 @@ app.post('/webhook', function (req, res) {
                 });
 
                 apiaiSession.on('response', function(response) {
-                  callback(null, functionSheet["findMeeting"]);
+                  callback(null, (functionSheet[event.message.payload] || functionSheet[response.result.metadata.intent]));
                 });
 
                 apiaiSession.on('error', function(error) {

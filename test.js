@@ -1,4 +1,2 @@
-var hi = [{
-  user: 'sonoftherock'
-}];
-console.log(hi[0].user);
+var qr = require('./quick_replies');
+console.log(qr.reply_arrays["Menu"]);
