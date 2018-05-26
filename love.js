@@ -15,9 +15,14 @@ function one_to_one(event){
 function fallback(event){
   api.sendResponse(event, {"text": "에비앙"});
 }
+function introduce_mentor(event){
+  var messageData = {"text": "어떤 선배?", "quick_replies": qr.reply_arrays["Mentor_type"]};
+  api.sendResponse(event, messageData);
+}
 
 module.exports = {
   functionMatch: {
+    "선배한테 조언": introduce_mentor,
     "미팅 잡아줘": n_to_n,
     "좋은 사람 소개시켜줘": one_to_one,
     "fallback": fallback
