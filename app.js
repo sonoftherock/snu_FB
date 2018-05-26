@@ -68,7 +68,7 @@ app.post('/webhook', function (req, res) {
             if (result.length > 0){
               if (result[0].conv_context != "none") {
                 callback(null, functionSheet[result[0].conv_context]);
-              } else if (event.message.quick_replies.payload) {
+              } else if (event.message.quick_replies) {
                 callback(null, functionSheet[event.message.quick_replies.payload]);
               } else {
                 var apiaiSession = nlpapp.textRequest("'" + event.message.text + "'", {
