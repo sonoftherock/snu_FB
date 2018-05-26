@@ -33,7 +33,7 @@ function query_demand2(event){
 }
 
 function introduce_mentor(event){
-  var messageData = {"text": "", "quick_replies": qr.reply_arrays["Mentor_type"]};
+  var messageData = {"text": "어떤 선배?", "quick_replies": qr.reply_arrays["Mentor_type"]};
   api.sendResponse(event, messageData);
 }
 
