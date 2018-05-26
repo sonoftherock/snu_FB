@@ -40,7 +40,8 @@ function introduce_mentor(event){
 module.exports = {
   functionMatch: {
     "선배한테 조언": "introduce_mentor",
-    "query_demand1": "query_demand1",
+    "기타": "query_demand1",
+    "다른 선배": "query_demand1",
     "query_demand2": "query_demand2"
   }
 }

@@ -24,7 +24,7 @@ var Menu = [{
 },{
   "content_type": "text",
   "title": "기타",
-  "payload": "query_demand1"
+  "payload": "기타"
 }]
 
 var Mentor_type = [{
