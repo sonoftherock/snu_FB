@@ -74,7 +74,7 @@ app.post('/webhook', function (req, res) {
                 });
 
                 apiaiSession.on('response', function(response) {
-                  console.log(event.message.payload);
+                  console.log(event.message);
                   callback(null, (functionSheet[event.message.payload] || functionSheet[response.result.metadata.intentName]));
                 });
 
