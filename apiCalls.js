@@ -28,7 +28,7 @@ function sendMessage(event, messageToSend) {
   callSendAPI(messageData);
 }
 
-function handleWebview(event) {
+function handleWebview(event, title, url) {
   var senderID = event.sender.id;
     let messageData = {
       recipient: {
@@ -40,9 +40,9 @@ function handleWebview(event) {
             "elements":[{
               "buttons": [
                 {
-                  "title":"Compact: Hoomba",
+                  "title":title,
                   "type":"web_url",
-                  "url":"http://wiki.dcinside.com/wiki/%ED%9B%94%EB%B0%94%ED%9B%94%EB%B0%94",
+                  "url":url,
                   "webview_height_ratio":"compact"
                 },
               ],
