@@ -1,5 +1,6 @@
 var api = require("./apiCalls")
 var mysql = require('mysql');
+var async = require('async');
 var connection = mysql.createConnection(process.env.DATABASE_URL);
 
 function n_to_n(event){

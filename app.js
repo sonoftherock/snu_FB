@@ -102,6 +102,11 @@ app.post('/webhook', function (req, res) {
   }
 });
 
+// webview URLs
+app.get('/register', function(req, res){
+  res.sendFile(path.join(__dirname + '/webviews/registration.html'));
+});
+
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
