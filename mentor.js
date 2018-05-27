@@ -1,4 +1,5 @@
 var api = require("./apiCalls");
+var async = require('async');
 var qr = require("./quick_replies.js");
 var mysql = require('mysql');
 var connection = mysql.createConnection(process.env.DATABASE_URL);
