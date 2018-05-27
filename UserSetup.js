@@ -97,6 +97,8 @@ module.exports = {
     "registerUser": registerUser,
     "register1": register1,
     "register2": register2,
-    "notStudent": notStudent
+    "notStudent": notStudent,
+    //temporary additions
+    "메뉴": register2
   }
 }
