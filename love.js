@@ -9,7 +9,17 @@ function n_to_n(event){
 };
 
 function one_to_one(event){
-  var messageData =  {"text": "소개팅?"};
+  task = [
+    function(callback){
+      connection.query('INSERT INTO Sogaeting (user_id, sex, school, college_major) VALUES ("' + event.message.text + '")');
+      callback(null, )
+    },
+    function(null, callback){
+      var messageData =  {"text": "소개팅?"};
+
+    }
+  ];
+  async.waterfall(task);
   api.sendResponse(event, messageData);
 };
 
